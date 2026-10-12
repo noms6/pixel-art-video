@@ -1,144 +1,128 @@
-# 🎨 Pixel Art Video — Romantik Mesaj Uygulaması
+<div align="center">
 
-> **English:** Turn any video into pixel art, flower mosaics or ASCII art, add a personal message and share it as
-> MP4/WebM, GIF or a single offline HTML page. Runs locally on Windows (exe) or with Python. The interface is
-> available in **24 languages** and picks your browser language automatically. Download it from
-> [Releases](../../releases).
+<img src="static/favicon.png" width="72" alt="">
 
-Videonu pixel art'a, çiçek/şekil mozaiğine ya da ASCII sanatına dönüştür, mesajını ekle;
-video, GIF ya da tek dosyalık bir web sayfası olarak sevdiğine gönder.
+# Pixel Art Video
 
-## ✨ Özellikler
+**Turn any video into pixel art, flower mosaics or ASCII art, add a personal message and share it.**
 
-- **Hızlı dönüştürme**: 8 sn'lik 720p video ~1 sn'de, 1 dakikalık 1080p video ~7 sn'de işlenir
-- **Her format**: MP4, MOV, WebM, AVI, MKV, WMV, FLV, M4V, 3GP, MPG, TS (en fazla 500 MB)
-- **Paletler**: Otomatik (videodan, 2–64 renk), Game Boy, PICO-8, Sweetie 16, CGA, Pastel, Gri, Sepya
-- **Dithering**: Bayer 4×4 (retro) ve 8×8
-- **Renk ayarları**: parlaklık, kontrast, doygunluk
-- **Kırpma**: başlangıç/bitiş saniyesi, maksimum frame
-- **28 stil**: düz pixel art, 10 çiçek, 7 şekil, 6 pixel deseni, 4 ASCII seti, Braille (⣿)
-- **Oynatıcı**: oynat/duraklat, ileri-geri sarma, 0.5×–2× hız; video her zaman doğru hızda oynar
-- **Dışa aktarma**: MP4 / WebM video (orijinal süresinde), GIF (sonsuz döngü), 480–1920 px
-- **Siteyi kaydet**: mesajlı, daktilo efektli, tek dosyalık HTML (~100–500 KB, internetsiz çalışır)
-- **Paylaş**: telefonda doğrudan paylaşım menüsü, masaüstünde dosya indirme
-- **24 dil**: Türkçe, English, Deutsch, Français, Español, Italiano, Português, Nederlands, Polski, Română,
-  Svenska, Ελληνικά, Русский, Українська, Azərbaycanca, العربية, فارسی, हिन्दी, 日本語, 한국어, 中文, Bahasa Indonesia,
-  Tiếng Việt, ไทย — tarayıcı diline göre otomatik seçilir, Arapça/Farsça sağdan sola
-- **20 tema, 15 hareketli arka plan**, mobil uyumlu arayüz, ayarlar tarayıcıda hatırlanır
+[![Tests](https://github.com/noms6/pixel-art-video/actions/workflows/test.yml/badge.svg)](https://github.com/noms6/pixel-art-video/actions/workflows/test.yml) [![Release](https://img.shields.io/github/v/release/noms6/pixel-art-video?color=ff6b9d)](https://github.com/noms6/pixel-art-video/releases/latest) [![Downloads](https://img.shields.io/github/downloads/noms6/pixel-art-video/total?color=c44569)](https://github.com/noms6/pixel-art-video/releases/latest) ![Languages](https://img.shields.io/badge/languages-24-8e44ad) [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-## 📥 İndir (Windows)
+🌐 **English** · [Türkçe](docs/readme/README.tr.md) · [Deutsch](docs/readme/README.de.md) · [Français](docs/readme/README.fr.md) · [Español](docs/readme/README.es.md) · [Italiano](docs/readme/README.it.md) · [Português](docs/readme/README.pt.md) · [Nederlands](docs/readme/README.nl.md) · [Polski](docs/readme/README.pl.md) · [Română](docs/readme/README.ro.md) · [Svenska](docs/readme/README.sv.md) · [Ελληνικά](docs/readme/README.el.md) · [Русский](docs/readme/README.ru.md) · [Українська](docs/readme/README.uk.md) · [Azərbaycanca](docs/readme/README.az.md) · [العربية](docs/readme/README.ar.md) · [فارسی](docs/readme/README.fa.md) · [हिन्दी](docs/readme/README.hi.md) · [日本語](docs/readme/README.ja.md) · [한국어](docs/readme/README.ko.md) · [中文](docs/readme/README.zh.md) · [Bahasa Indonesia](docs/readme/README.id.md) · [Tiếng Việt](docs/readme/README.vi.md) · [ไทย](docs/readme/README.th.md)
 
-[Releases](../../releases) sayfasından `PixelArtVideo-Windows-x64.zip` dosyasını indir, bir klasöre çıkar ve
-`VideoASCIIArtConverter.exe`'yi çalıştır. Python kurmana gerek yok; tarayıcı otomatik açılır.
+<img src="docs/images/demo-hearts.gif" width="420" alt="Pixel Art Video demo"> <img src="docs/images/demo-ascii.gif" width="420" alt="ASCII demo">
 
-> **"Windows bilgisayarınızı korudu" uyarısı:** Exe dijital olarak imzalı olmadığı için SmartScreen ilk açılışta
-> uyarabilir. **Ek bilgi → Yine de çalıştır** ile açabilirsin. Bazı antivirüsler PyInstaller ile paketlenmiş
-> uygulamaları yanlışlıkla işaretleyebilir; kaynak kodun tamamı bu repodadır, istersen kendin derleyebilirsin.
+</div>
 
-Uygulama yalnızca bu bilgisayarda çalışır (`127.0.0.1`); videoların hiçbir sunucuya gönderilmez.
+## ✨ Features
 
-## 🚀 Çalıştırma (kaynak koddan)
+- Fast: a 1-minute 1080p video converts in about 7 seconds
+- Every common format: MP4, MOV, WebM, AVI, MKV, WMV, FLV and more (up to 500 MB)
+- 28 styles: plain pixel art, flowers, hearts, shapes, LED, ASCII and Braille
+- Palettes (auto, Game Boy, PICO-8, CGA, sepia…), dithering, brightness/contrast, trimming
+- Export as MP4/WebM video at the original speed or as an endlessly looping GIF
+- Save a single-file web page with your message and a typewriter effect (100–500 KB, works offline)
+- Available in 24 languages, chosen automatically from your browser
+- Runs entirely on your computer — your videos are never uploaded anywhere
 
-### Python ile
+## 📥 Download (Windows)
+
+1. Download `PixelArtVideo-Windows-x64.zip` from the [latest release](https://github.com/noms6/pixel-art-video/releases/latest).
+2. Extract it and run `VideoASCIIArtConverter.exe` — your browser opens automatically. No Python needed.
+
+> If Windows SmartScreen warns you, click **More info → Run anyway** (the app is not code-signed).
+
+## 🖼️ Screenshots
+
+| | |
+|---|---|
+| <img src="docs/images/upload.png" alt=""><br>Upload a video | <img src="docs/images/preview.png" alt=""><br>Original and pixel art side by side |
+| <img src="docs/images/result.png" alt=""><br>Pick a style and write your message | <img src="docs/images/mobile-rtl.png" width="260" alt=""><br>Mobile, right-to-left languages |
+
+## 🎨 Styles
+
+| | | |
+|---|---|---|
+| <img src="docs/images/style-pixel.png" alt=""><br>Pixel art | <img src="docs/images/style-rose.png" alt=""><br>Roses | <img src="docs/images/style-heart.png" alt=""><br>Hearts |
+| <img src="docs/images/style-ascii.png" alt=""><br>ASCII | <img src="docs/images/style-braille.png" alt=""><br>Braille | <img src="docs/images/style-led.png" alt=""><br>LED screen |
+
+## 🧭 How to use
+
+1. Upload a video (drag & drop or choose a file). Optionally open the conversion settings first.
+2. Check the preview. Change the settings and convert again without re-uploading.
+3. Press ✨ START ✨, pick a style and adjust size, density and colors.
+4. Write your message, then download a video or GIF, save the page or share it.
+
+## Development
+
+### Run from source
 
 ```bash
 pip install -r requirements.txt
 python start_app.py
 ```
 
-Tarayıcı otomatik açılır. Port 5000 doluysa sıradaki boş port kullanılır.
+The browser opens automatically. If port 5000 is busy the next free port is used.
 
-### Windows uygulaması (exe)
+| Environment variable | Meaning |
+|---|---|
+| `PORT` | Preferred port (default 5000) |
+| `PIXELART_NO_BROWSER=1` | Don't open the browser |
+| `PIXELART_DATA_DIR` | Working-data folder (default: `%LOCALAPPDATA%\PixelArtVideo` for the exe, `data/` from source; files older than 24 h are removed automatically) |
+| `FLASK_DEBUG=1` | Debug mode for `python app.py` (bound to 127.0.0.1 only) |
+
+### Build the Windows app
 
 ```bash
 build.bat
 ```
 
-Çıktı: `dist\VideoASCIIArtConverter\VideoASCIIArtConverter.exe`. Klasörün tamamını birlikte taşı.
-Tek dosya istersen: `python build_exe.py --onefile` (her açılışta geçici klasöre açıldığı için daha yavaş başlar).
+Output: `dist\VideoASCIIArtConverter\VideoASCIIArtConverter.exe` (keep the whole folder together).
+`python build_exe.py --onefile` builds a single exe instead (slower start-up).
+Publishing a GitHub Release builds the exe automatically and attaches the zip (`.github/workflows/release.yml`).
 
-Çalışma verisi exe'de `%LOCALAPPDATA%\PixelArtVideo`, geliştirmede `data/` klasöründedir;
-24 saatten eski dosyalar otomatik silinir.
-
-| Ortam değişkeni | Anlamı |
-|---|---|
-| `PORT` | Tercih edilen port (varsayılan 5000) |
-| `PIXELART_NO_BROWSER=1` | Tarayıcıyı açma |
-| `PIXELART_DATA_DIR` | Çalışma verisi klasörü |
-| `FLASK_DEBUG=1` | `python app.py` için debug modu (yalnızca 127.0.0.1) |
-
-## 🧭 Kullanım
-
-1. **Video yükle** — sürükle-bırak ya da "Dosya Seç". İstersen önce **Dönüştürme ayarları**nı aç.
-2. **Önizleme** — orijinal ve pixel art yan yana. Ayarları değiştirip **Yeniden dönüştür** diyebilirsin
-   (video tekrar yüklenmez).
-3. **✨ START ✨** — stili seç (çiçek, şekil, ASCII, Braille…), boyut/yoğunluk/renk karışımını ayarla.
-4. **Mesajını yaz**, sonra **İndir** (MP4/WebM/GIF), **Siteyi kaydet** ya da **Paylaş**.
-
-## 🧱 Mimari
+### Architecture
 
 ```
-start_app.py      başlatıcı: paket kontrolü, boş port, waitress sunucusu, tarayıcı
-app.py            Flask API (/api/uploads, /api/jobs, /api/config) — tüm hatalar JSON
-jobs.py           arka plan iş kuyruğu, ilerleme, iptal, 24 saatlik otomatik temizlik
-converter.py      video → palet indeksleri (zaman tabanlı fps, global palet, 32³ renk tablosu)
+start_app.py      launcher: package check, free port, waitress server, opens the browser
+app.py            Flask API (/api/uploads, /api/jobs, /api/config) — every error is JSON with a code
+jobs.py           background job queue, progress, cancellation, 24 h clean-up
+converter.py      video → palette indices (time-based fps, global palette, 32³ colour lookup table)
 static/js/
-  main.js         arayüz akışı ve durum
-  api.js          sunucu istemcisi (yükleme ilerlemesi, iş takibi)
-  renderer.js     canvas çizim motoru + oynatıcı (kaydedilen sayfaya da gömülür)
-  shapes.js       şekil, ASCII seti, tema ve arka plan tanımları
-  i18n.js         dil seçimi ve çeviri (static/i18n/<dil>.json, 24 dil)
-  export.js       video kaydı, GIF kodlayıcı, tek dosyalık sayfa
-legacy/           eski terminal ASCII scriptleri
-tests/            pytest testleri
+  main.js         UI flow and state
+  api.js          server client (upload progress, job polling)
+  renderer.js     canvas renderer + player (also embedded in saved pages)
+  shapes.js       shapes, ASCII sets, themes, backgrounds
+  export.js       video recording, GIF encoder, single-file page
+  i18n.js         language selection (static/i18n/<lang>.json)
+legacy/           original terminal ASCII scripts
+tests/            pytest suite
+tools/            README generator
 ```
 
-**Veri formatı:** her iş `meta.json` (boyut, fps, palet) ve `frames.bin` (frame × yükseklik × genişlik
-adet `uint8` palet indeksi, gzip ile sunulur) üretir. 8 sn'lik 720p video için ~80 KB.
+Each conversion produces `meta.json` (size, fps, palette) and `frames.bin` (frame × height × width `uint8`
+palette indices, served gzip-compressed) — about 80 KB for an 8-second 720p clip.
 
-## 🧪 Test
+### Tests
 
 ```bash
 pip install -r requirements-dev.txt
 python -m pytest
 ```
 
-Yeni dil eklemek: `static/i18n/en.json`'u kopyalayıp çevir, kodunu `static/js/i18n.js` içindeki `LANGUAGES`
-listesine ekle. `tests/test_i18n.py` eksik anahtar veya hatalı `{parametre}` olup olmadığını denetler.
+Covers the converter (fps, trimming, tiny/solid videos, palettes, validation, cancellation), the API (full flow,
+JSON errors, 413, concurrent uploads, TTL clean-up), every translation file, and a pixel-exact check of the GIF
+encoder against Pillow (needs Node.js).
 
-Kapsam: dönüştürücü (fps, kırpma, küçük/tek renk videolar, paletler, doğrulama, iptal), API (tam akış,
-JSON hatalar, 413, eşzamanlı yüklemeler, TTL temizliği) ve GIF kodlayıcının Pillow ile piksel piksel doğrulanması
-(Node.js gerekir).
+### Translations
 
-## 🌐 Tarayıcı desteği
+UI strings live in `static/i18n/<lang>.json`. To add a language, copy `en.json`, translate it and add the code to
+`LANGUAGES` in `static/js/i18n.js`; `tests/test_i18n.py` reports missing keys or mismatched `{placeholders}`.
+README texts are generated by `python tools/make_readmes.py`.
 
-Güncel Chrome, Edge, Firefox ve Safari (16.4+). MP4 kaydı tarayıcı destekliyorsa yapılır; desteklemiyorsa
-otomatik WebM'e geçilir. Kaydedilen HTML sayfası JavaScript çalıştırmayan önizleyicilerde (ör. iPhone'da
-WhatsApp/Dosyalar önizlemesi) yalnızca mesajı gösterir; animasyon için dosyayı tarayıcıda açmak gerekir.
 
-## 🐛 Sorun giderme
-
-- **Orijinal video önizlemede görünmüyor**: Tarayıcı bazı formatları (AVI, MKV, WMV, FLV) oynatamaz;
-  dönüştürme yine de çalışır.
-- **Video kaydı uzun sürüyor**: Kayıt gerçek zamanlıdır (10 sn video = 10 sn). Bu sırada sekmeyi açık tut.
-  Daha hızlı sonuç için GIF seç.
-- **Pixel boyutu otomatik büyüdü**: Grid en fazla 320×320 hücre olabilir; çok yüksek çözünürlükte
-  pixel boyutu otomatik artırılır.
-- **"Video … frame sınırında kesildi"**: En fazla 3000 frame işlenir. Bitiş zamanı ver ya da fps'i düşür.
-
-## 📚 Geliştirme notları
-
-Proje analizi, test raporları ve yol haritası: [docs/ANALIZ_VE_PLAN.md](docs/ANALIZ_VE_PLAN.md)
-
-Yeni sürüm yayınlamak: GitHub'da bir Release yayınla (ör. `gh release create v1.1.0 --generate-notes`) — GitHub
-Actions testleri çalıştırır, exe'yi derler ve `PixelArtVideo-Windows-x64.zip` olarak sürüme ekler.
-
-## 📄 Üçüncü taraf yazılımlar
-
-Exe şu açık kaynak bileşenleri içerir: [OpenCV](https://opencv.org) (Apache 2.0) ve onunla gelen
-[FFmpeg](https://ffmpeg.org) (LGPL 2.1), [NumPy](https://numpy.org) (BSD), [Flask](https://flask.palletsprojects.com)
-ve Werkzeug/Jinja2 (BSD), [Waitress](https://github.com/Pylons/waitress) (ZPL 2.1), Python (PSF).
-
-## 📜 Lisans
+## 📜 License
 
 [MIT](LICENSE) © noms6
+
+The Windows build bundles these open-source components: [OpenCV](https://opencv.org) (Apache 2.0) + [FFmpeg](https://ffmpeg.org) (LGPL 2.1) · [NumPy](https://numpy.org) (BSD) · [Flask](https://flask.palletsprojects.com) (BSD) · [Waitress](https://github.com/Pylons/waitress) (ZPL 2.1) · Python (PSF)

@@ -77,3 +77,10 @@ def required_keys():
 def test_every_used_key_is_translated():
     missing = sorted(k for k in required_keys() if k not in EN)
     assert not missing, f'en.json içinde eksik: {missing}'
+
+
+def test_readme_exists_for_every_language():
+    for code in language_codes():
+        path = os.path.join(ROOT, 'README.md') if code == 'en' else os.path.join(ROOT, 'docs', 'readme', f'README.{code}.md')
+        assert os.path.exists(path), path
+        assert 'docs/images' in read(path) or '../images/' in read(path)
