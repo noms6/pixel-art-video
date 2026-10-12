@@ -1,0 +1,21 @@
+# Çalışma zamanı verisi
+data/
+uploads/
+static/outputs/
+output.txt
+
+# Medya (büyük dosyalar)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+*.wmv
+*.flv
+
+# Python / build
+__pycache__/
+*.pyc
+.pytest_cache/
+build/
+dist/

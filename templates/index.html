@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art Video - Romantik Mesaj</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Üst ayarlar paneli -->
+    <div class="top-settings" id="topSettings">
+        <div class="settings-content">
+            <div class="setting-group">
+                <label>Tema:</label>
+                <select id="themeSelect" class="setting-input">
+                    <option value="romantic">💕 Romantik</option>
+                    <option value="spring">🌸 Bahar</option>
+                    <option value="sunset">🌅 Gün Batımı</option>
+                    <option value="ocean">🌊 Okyanus</option>
+                    <option value="forest">🌲 Orman</option>
+                    <option value="purple">💜 Mor</option>
+                    <option value="pink">🌸 Pembe</option>
+                    <option value="blue">💙 Mavi</option>
+                    <option value="green">💚 Yeşil</option>
+                    <option value="orange">🧡 Turuncu</option>
+                    <option value="red">❤️ Kırmızı</option>
+                    <option value="gold">✨ Altın</option>
+                    <option value="lavender">💐 Lavanta</option>
+                    <option value="rose">🌹 Gül</option>
+                    <option value="sunset2">🌆 Şehir Gün Batımı</option>
+                    <option value="aurora">🌌 Aurora</option>
+                    <option value="neon">💡 Neon</option>
+                    <option value="pastel">🎨 Pastel</option>
+                    <option value="dark">🌙 Karanlık</option>
+                    <option value="light">☀️ Aydınlık</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label>Arka Plan Öğesi:</label>
+                <select id="backgroundElementSelect" class="setting-input">
+                    <option value="none">❌ Yok</option>
+                    <option value="flowers">🌸 Çiçekler</option>
+                    <option value="stars">⭐ Yıldızlar</option>
+                    <option value="hearts">❤️ Kalpler</option>
+                    <option value="leaves">🍃 Yapraklar</option>
+                    <option value="butterflies">🦋 Kelebekler</option>
+                    <option value="snowflakes">❄️ Kar Tanesi</option>
+                    <option value="sparkles">✨ Işıltılar</option>
+                    <option value="bubbles">💭 Baloncuklar</option>
+                    <option value="cherry_blossoms">🌸 Kiraz Çiçekleri</option>
+                    <option value="rose_petals">🌹 Gül Yaprakları</option>
+                    <option value="fireflies">✨ Ateş Böcekleri</option>
+                    <option value="raindrops">💧 Yağmur Damlaları</option>
+                    <option value="confetti">🎊 Konfeti</option>
+                    <option value="music_notes">🎵 Müzik Notaları</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label>Çiçek/Tip:</label>
+                <select id="flowerSelect" class="setting-input">
+                    <optgroup label="🌺 Çiçekler">
+                        <option value="rose">🌹 Gül</option>
+                        <option value="tulip">🌷 Lale</option>
+                        <option value="sunflower">🌻 Ayçiçeği</option>
+                        <option value="cherry_blossom">🌸 Kiraz Çiçeği</option>
+                        <option value="daisy">🌼 Papatya</option>
+                        <option value="lily">💐 Zambak</option>
+                        <option value="orchid">🦋 Orkide</option>
+                        <option value="lavender">🌿 Lavanta</option>
+                        <option value="jasmine">🌺 Yasemin</option>
+                        <option value="lotus">🪷 Lotus</option>
+                    </optgroup>
+                    <optgroup label="✨ Şekiller">
+                        <option value="heart">❤️ Kalp</option>
+                        <option value="star">⭐ Yıldız</option>
+                        <option value="diamond">💎 Elmas</option>
+                        <option value="circle">⭕ Daire</option>
+                        <option value="square">⬛ Kare</option>
+                        <option value="triangle">🔺 Üçgen</option>
+                        <option value="sparkle">✨ Işık</option>
+                    </optgroup>
+                    <optgroup label="🎨 ASCII & Pixel">
+                        <option value="ascii_dot">🔸 ASCII Nokta</option>
+                        <option value="ascii_block">█ ASCII Blok</option>
+                        <option value="pixel_square">⬜ Pixel Kare</option>
+                        <option value="pixel_circle">● Pixel Daire</option>
+                        <option value="pixel_diamond">◆ Pixel Elmas</option>
+                        <option value="ascii_char">@ ASCII Karakter</option>
+                        <option value="ascii_art">🎨 ASCII Art (Klasik)</option>
+                        <option value="ascii_dense">▓ ASCII Yoğun</option>
+                        <option value="ascii_light">░ ASCII Açık</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label>Çiçek Yoğunluğu:</label>
+                <input type="range" id="densitySlider" min="0.1" max="3" step="0.1" value="1" class="setting-slider">
+                <span id="densityValue">1</span>
+            </div>
+            <div class="setting-group">
+                <label>Pixel Boyutu:</label>
+                <input type="range" id="pixelSizeSlider" min="2" max="48" step="2" value="8" class="setting-slider">
+                <span id="pixelSizeValue">8</span>
+            </div>
+            <button class="btn-settings-toggle" id="advancedSettingsBtn">⚙️ İnce Ayarlar</button>
+            <button class="btn-settings-toggle" id="toggleNavBtn">👁️ Navbar Gizle</button>
+        </div>
+    </div>
+    
+    <!-- Navbar göster butonu (navbar gizlendiğinde görünür) -->
+    <button class="btn-show-navbar" id="showNavBtn" style="display: none;">👁️ Navbar Göster</button>
+
+    <!-- İnce Ayarlar Paneli -->
+    <div class="advanced-settings" id="advancedSettings" style="display: none;">
+        <div class="settings-content">
+            <div class="setting-group">
+                <label>Çiçek Ölçeği:</label>
+                <input type="range" id="flowerScaleSlider" min="2" max="10" step="1" value="3" class="setting-slider">
+                <span id="flowerScaleValue">3</span>
+            </div>
+            <div class="setting-group">
+                <label>Video FPS:</label>
+                <input type="number" id="videoFpsInput" min="5" max="30" value="10" class="setting-input-small">
+            </div>
+            <div class="setting-group">
+                <label>Video Kalitesi:</label>
+                <select id="videoQualitySelect" class="setting-input">
+                    <option value="0.5">Düşük (0.5x)</option>
+                    <option value="1" selected>Orijinal (1x)</option>
+                    <option value="1.5">Yüksek (1.5x)</option>
+                    <option value="2">Çok Yüksek (2x)</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label>Video Formatı:</label>
+                <select id="videoFormatSelect" class="setting-input">
+                    <option value="webm">WebM</option>
+                    <option value="mp4" selected>MP4</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label>Maksimum Frame:</label>
+                <input type="number" id="maxFramesInput" min="0" value="0" class="setting-input-small" title="0 = Tümü">
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana container -->
+    <div class="container" id="mainContainer">
+        <header class="header">
+            <h1 class="title">🎨 Pixel Art Video Mesajı 🎨</h1>
+            <p class="subtitle">Videolarınızı pixel art çiçeklere dönüştürün ve sevdiğinize gönderin</p>
+        </header>
+
+        <!-- Video yükleme bölümü -->
+        <div class="upload-section" id="uploadSection">
+            <div class="upload-box" id="uploadBox">
+                <div class="upload-icon">📹</div>
+                <h3>Video Yükle</h3>
+                <p>Video dosyanızı buraya sürükleyin veya tıklayın</p>
+                <input type="file" id="videoInput" accept="video/*" hidden>
+                <button class="btn-upload" onclick="document.getElementById('videoInput').click()">
+                    Dosya Seç
+                </button>
+            </div>
+        </div>
+
+        <!-- Video önizleme ve pixel art geçiş -->
+        <div class="video-preview-section" id="videoPreviewSection" style="display: none;">
+            <div class="preview-container">
+                <video id="videoPreview" controls style="display: none;"></video>
+                <canvas id="pixelCanvas"></canvas>
+            </div>
+            <div class="preview-controls">
+                <button class="btn-start" id="startBtn">✨ START ✨</button>
+            </div>
+        </div>
+
+        <!-- Pixel art çiçek gösterimi -->
+        <div class="flower-display-section" id="flowerDisplaySection" style="display: none;">
+            <div class="output-header">
+                <h2 class="output-title">✨ Pixel Art Video Mesajınız Hazır! ✨</h2>
+                <p class="output-subtitle">Sevdiğinize özel mesajınızı yazın ve paylaşın</p>
+            </div>
+            
+            <div class="message-area">
+                <div class="message-label">💌 Mesajınız</div>
+                <textarea id="messageText" placeholder="Sevdiğinize özel bir mesaj yazın... 💕" rows="4"></textarea>
+            </div>
+            
+            <div class="video-preview-container">
+                <div class="preview-label">🎨 Canlı Önizleme</div>
+                <div class="flower-canvas-container">
+                    <canvas id="flowerCanvas"></canvas>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <div class="button-group">
+                    <div class="button-label">📥 İndirme</div>
+                    <div class="buttons-row">
+                        <button class="btn-action" id="downloadPixelVideoBtn">
+                            <span class="btn-icon">🎬</span>
+                            <span class="btn-text">Pixel Video</span>
+                        </button>
+                        <button class="btn-action" id="downloadFlowerVideoBtn">
+                            <span class="btn-icon">🌸</span>
+                            <span class="btn-text">Çiçek Video</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <div class="button-label">💾 Paylaşım</div>
+                    <div class="buttons-row">
+                        <button class="btn-action" id="saveBtn">
+                            <span class="btn-icon">💾</span>
+                            <span class="btn-text">Siteyi Kaydet</span>
+                        </button>
+                        <button class="btn-action" id="shareBtn">
+                            <span class="btn-icon">📤</span>
+                            <span class="btn-text">Paylaş</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- İlerleme çubuğu -->
+        <div class="progress-section" id="progressSection" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="progress-text" id="progressText">İşleniyor...</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
