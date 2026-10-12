@@ -20,7 +20,7 @@ import webbrowser
 from pathlib import Path
 
 FROZEN = getattr(sys, 'frozen', False)
-REQUIRED = {'cv2': 'opencv-python', 'numpy': 'numpy', 'flask': 'flask', 'waitress': 'waitress'}
+REQUIRED = {'cv2': 'opencv-python-headless', 'numpy': 'numpy', 'flask': 'flask', 'waitress': 'waitress'}
 
 
 def configure_console():
