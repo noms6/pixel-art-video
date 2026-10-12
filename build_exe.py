@@ -20,6 +20,33 @@ EXCLUDES = ['tkinter', 'unittest', 'pytest', 'PIL', 'matplotlib', 'IPython', 'py
             'cryptography', 'yaml']
 
 
+ICON_SIZES = [16, 20, 24, 32, 40, 48, 64, 96, 128, 256]
+
+
+def ensure_icon():
+    """icon.png'den kare, çok boyutlu icon.ico üret (png daha yeniyse ya da ico yoksa)."""
+    png, ico = ROOT / 'icon.png', ROOT / 'icon.ico'
+    if not png.exists():
+        return ico if ico.exists() else None
+    if ico.exists() and ico.stat().st_mtime >= png.stat().st_mtime:
+        return ico
+    try:
+        from PIL import Image
+    except ImportError:
+        print('⚠ Pillow yok, mevcut icon.ico kullanılıyor (pip install pillow)')
+        return ico if ico.exists() else None
+    img = Image.open(png).convert('RGBA')
+    w, h = img.size
+    side = min(w, h)
+    # Dikey görselde üstten biraz pay bırakarak yüzlerin olduğu kare bölgeyi al
+    left = (w - side) // 2
+    top = max(0, min(h - side, int((h - side) * 0.3)))
+    square = img.crop((left, top, left + side, top + side))
+    square.save(ico, format='ICO', sizes=[(n, n) for n in ICON_SIZES])
+    print(f'✓ İkon oluşturuldu: {ico.name} ({", ".join(map(str, ICON_SIZES))} px)')
+    return ico
+
+
 def main():
     for stream in (sys.stdout, sys.stderr):
         try:
@@ -52,6 +79,7 @@ def main():
         f'--add-data={ROOT / "templates"}{sep}templates',
         # static/ klasörünün tamamı değil: eski çalışma çıktıları (static/outputs) pakete girmesin
         f'--add-data={ROOT / "static" / "style.css"}{sep}static',
+        f'--add-data={ROOT / "static" / "favicon.png"}{sep}static',
         f'--add-data={ROOT / "static" / "js"}{sep}static/js',
         f'--paths={ROOT}',
         '--hidden-import=waitress',
@@ -60,8 +88,8 @@ def main():
         '--hidden-import=jobs',
     ]
     options += [f'--exclude-module={m}' for m in EXCLUDES]
-    icon = ROOT / 'icon.ico'
-    if icon.exists():
+    icon = ensure_icon()
+    if icon:
         options.append(f'--icon={icon}')
 
     PyInstaller.__main__.run(options)
