@@ -1,155 +1,97 @@
-# 🎨 Pixel Art Video - Romantik Mesaj Uygulaması
+# 🎨 Pixel Art Video — Romantik Mesaj Uygulaması
 
-Videolarınızı pixel art çiçeklere dönüştüren ve sevdiğinize özel mesajlar oluşturmanızı sağlayan web uygulaması.
+Videonu pixel art'a, çiçek/şekil mozaiğine ya da ASCII sanatına dönüştür, mesajını ekle;
+video, GIF ya da tek dosyalık bir web sayfası olarak sevdiğine gönder.
 
 ## ✨ Özellikler
 
-- 🎬 **Video Yükleme**: Video dosyalarınızı yükleyin
-- 🎨 **Pixel Art Dönüştürme**: Video yavaş yavaş pixel art'a dönüşür
-- 🌸 **Çiçek Dönüşümü**: START butonuna basınca tüm site pixel art çiçeklerden oluşur
-- 🎭 **Tema Sistemi**: 5 farklı romantik tema (Romantik, Bahar, Gün Batımı, Okyanus, Orman)
-- 🌹 **Çiçek Tipleri**: 6 farklı pixel art çiçek (Gül, Lale, Ayçiçeği, Kiraz Çiçeği, Kalp, Yıldız)
-- 💕 **Mesaj Yazma**: Sevdiğinize özel mesaj yazabilirsiniz
-- 💾 **Site Kaydetme**: Tüm siteyi tek HTML dosyası olarak kaydedip gönderebilirsiniz
-- ⚡ **Performans Optimizasyonu**: Site kasmasın diye optimize edilmiş
+- **Hızlı dönüştürme**: 8 sn'lik 720p video ~1 sn'de, 1 dakikalık 1080p video ~7 sn'de işlenir
+- **Her format**: MP4, MOV, WebM, AVI, MKV, WMV, FLV, M4V, 3GP, MPG, TS (en fazla 500 MB)
+- **Paletler**: Otomatik (videodan, 2–64 renk), Game Boy, PICO-8, Sweetie 16, CGA, Pastel, Gri, Sepya
+- **Dithering**: Bayer 4×4 (retro) ve 8×8
+- **Renk ayarları**: parlaklık, kontrast, doygunluk
+- **Kırpma**: başlangıç/bitiş saniyesi, maksimum frame
+- **28 stil**: düz pixel art, 10 çiçek, 7 şekil, 6 pixel deseni, 4 ASCII seti, Braille (⣿)
+- **Oynatıcı**: oynat/duraklat, ileri-geri sarma, 0.5×–2× hız; video her zaman doğru hızda oynar
+- **Dışa aktarma**: MP4 / WebM video (orijinal süresinde), GIF (sonsuz döngü), 480–1920 px
+- **Siteyi kaydet**: mesajlı, daktilo efektli, tek dosyalık HTML (~100–500 KB, internetsiz çalışır)
+- **Paylaş**: telefonda doğrudan paylaşım menüsü, masaüstünde dosya indirme
+- **20 tema, 15 hareketli arka plan**, mobil uyumlu arayüz, ayarlar tarayıcıda hatırlanır
 
-## 📦 Kurulum
+## 🚀 Çalıştırma
 
-### 🚀 EXE Oluşturma (Önerilen)
-
-1. `build.bat` dosyasını çift tıklayarak çalıştırın
-2. `dist/VideoASCIIArtConverter.exe` dosyası oluşturulacak
-3. Exe dosyasını çalıştırın - otomatik olarak:
-   - ✅ Python kontrolü yapılır (yoksa Python sitesine yönlendirir)
-   - ✅ Eksik paketler yüklenir
-   - ✅ Tarayıcı otomatik açılır
-
-### 📝 Normal Kurulum
-
-### 1. Bağımlılıkları Yükleyin
+### Python ile
 
 ```bash
 pip install -r requirements.txt
+python start_app.py
 ```
 
-### 2. Uygulamayı Başlatın
+Tarayıcı otomatik açılır. Port 5000 doluysa sıradaki boş port kullanılır.
+
+### Windows uygulaması (exe)
 
 ```bash
-python app.py
+build.bat
 ```
 
-### 3. Tarayıcıda Açın
+Çıktı: `dist\VideoASCIIArtConverter\VideoASCIIArtConverter.exe`. Klasörün tamamını birlikte taşı.
+Tek dosya istersen: `python build_exe.py --onefile` (her açılışta geçici klasöre açıldığı için daha yavaş başlar).
+
+Çalışma verisi exe'de `%LOCALAPPDATA%\PixelArtVideo`, geliştirmede `data/` klasöründedir;
+24 saatten eski dosyalar otomatik silinir.
+
+| Ortam değişkeni | Anlamı |
+|---|---|
+| `PORT` | Tercih edilen port (varsayılan 5000) |
+| `PIXELART_NO_BROWSER=1` | Tarayıcıyı açma |
+| `PIXELART_DATA_DIR` | Çalışma verisi klasörü |
+| `FLASK_DEBUG=1` | `python app.py` için debug modu (yalnızca 127.0.0.1) |
+
+## 🧭 Kullanım
+
+1. **Video yükle** — sürükle-bırak ya da "Dosya Seç". İstersen önce **Dönüştürme ayarları**nı aç.
+2. **Önizleme** — orijinal ve pixel art yan yana. Ayarları değiştirip **Yeniden dönüştür** diyebilirsin
+   (video tekrar yüklenmez).
+3. **✨ START ✨** — stili seç (çiçek, şekil, ASCII, Braille…), boyut/yoğunluk/renk karışımını ayarla.
+4. **Mesajını yaz**, sonra **İndir** (MP4/WebM/GIF), **Siteyi kaydet** ya da **Paylaş**.
+
+## 🧱 Mimari
 
 ```
-http://localhost:5000
+start_app.py      başlatıcı: paket kontrolü, boş port, waitress sunucusu, tarayıcı
+app.py            Flask API (/api/uploads, /api/jobs, /api/config) — tüm hatalar JSON
+jobs.py           arka plan iş kuyruğu, ilerleme, iptal, 24 saatlik otomatik temizlik
+converter.py      video → palet indeksleri (zaman tabanlı fps, global palet, 32³ renk tablosu)
+static/js/
+  main.js         arayüz akışı ve durum
+  api.js          sunucu istemcisi (yükleme ilerlemesi, iş takibi)
+  renderer.js     canvas çizim motoru + oynatıcı (kaydedilen sayfaya da gömülür)
+  shapes.js       şekil, ASCII seti, tema ve arka plan tanımları
+  export.js       video kaydı, GIF kodlayıcı, tek dosyalık sayfa
+legacy/           eski terminal ASCII scriptleri
+tests/            pytest testleri
 ```
 
-## 🚀 Kullanım
+**Veri formatı:** her iş `meta.json` (boyut, fps, palet) ve `frames.bin` (frame × yükseklik × genişlik
+adet `uint8` palet indeksi, gzip ile sunulur) üretir. 8 sn'lik 720p video için ~80 KB.
 
-### Adım 1: Video Yükleme
-1. Video dosyanızı sürükleyip bırakın veya "Dosya Seç" butonuna tıklayın
-2. Video otomatik olarak pixel art'a dönüştürülmeye başlar
+## 🧪 Test
 
-### Adım 2: Ayarları Özelleştirin
-Üst panelden:
-- **Tema**: Renk temasını seçin
-- **Çiçek Tipi**: Hangi çiçek tipini kullanmak istediğinizi seçin
-- **Çiçek Yoğunluğu**: Çiçeklerin ne kadar sık olacağını ayarlayın
-- **Pixel Boyutu**: Pixel art'ın detay seviyesini ayarlayın
-
-### Adım 3: START Butonuna Basın
-- Video pixel art'a dönüştükten sonra "✨ START ✨" butonuna basın
-- Tüm site pixel art çiçeklerden oluşacak
-
-### Adım 4: Mesaj Yazın ve Kaydedin
-- Mesaj alanına sevdiğinize özel bir mesaj yazın
-- "💾 Siteyi Kaydet" butonuna basarak tek HTML dosyası olarak kaydedin
-- Kaydedilen dosyayı sevdiğinize gönderebilirsiniz
-
-## 🎨 Temalar
-
-- **💕 Romantik**: Pembe tonları
-- **🌸 Bahar**: Açık yeşil ve pembe
-- **🌅 Gün Batımı**: Turuncu ve kırmızı
-- **🌊 Okyanus**: Mavi ve yeşil
-- **🌲 Orman**: Koyu yeşil tonları
-
-## 🌸 Çiçek Tipleri
-
-- **🌹 Gül**: Klasik kırmızı gül
-- **🌷 Lale**: Renkli lale
-- **🌻 Ayçiçeği**: Sarı ayçiçeği
-- **🌸 Kiraz Çiçeği**: Pembe kiraz çiçeği
-- **❤️ Kalp**: Romantik kalp
-- **⭐ Yıldız**: Parlayan yıldız
-
-## 📁 Dosya Yapısı
-
-```
-video-ascıı/
-├── app.py                      # Flask web uygulaması
-├── pixel_art_converter.py      # Pixel art dönüştürücü
-├── pixel_flowers.py            # Pixel art çiçek tasarımları
-├── video_to_ascii_color.py      # Renkli ASCII dönüştürücü (eski)
-├── requirements.txt            # Python bağımlılıkları
-├── templates/
-│   └── index.html              # Web arayüzü
-├── static/
-│   ├── style.css               # Stil dosyası
-│   └── script.js               # JavaScript
-├── uploads/                    # Yüklenen videolar
-└── static/outputs/             # Pixel art JSON çıktıları
+```bash
+pip install -r requirements-dev.txt
+python -m pytest
 ```
 
-## ⚙️ Teknik Detaylar
+Kapsam: dönüştürücü (fps, kırpma, küçük/tek renk videolar, paletler, doğrulama, iptal), API (tam akış,
+JSON hatalar, 413, eşzamanlı yüklemeler, TTL temizliği) ve GIF kodlayıcının Pillow ile piksel piksel doğrulanması
+(Node.js gerekir).
 
-### Pixel Art Dönüştürme
-- Video frame'leri küçük pixel boyutlarına indirgenir
-- Renk paleti sınırlandırılır (16 renk)
-- Nearest neighbor interpolation kullanılır
+## 🐛 Sorun giderme
 
-### Performans Optimizasyonları
-- Maksimum 30 frame işlenir (ayarlanabilir)
-- ImageData ile batch rendering
-- RequestAnimationFrame kullanımı
-- Debouncing ile güncelleme optimizasyonu
-
-### Site Kaydetme
-- Tüm içerik tek HTML dosyasına gömülür
-- Canvas verisi base64 olarak kaydedilir
-- Mesaj ve tema bilgileri korunur
-- Offline çalışabilir
-
-## 🎯 Kullanım Senaryoları
-
-1. **Romantik Mesaj**: Sevgilinize özel bir video mesajı oluşturun
-2. **Doğum Günü**: Doğum günü videosunu pixel art çiçeklere dönüştürün
-3. **Özel Günler**: Anneler günü, sevgililer günü gibi özel günler için
-4. **Sanat Eseri**: Videolarınızı sanat eserine dönüştürün
-
-## 🐛 Sorun Giderme
-
-### Video Yüklenemiyor
-- Dosya formatını kontrol edin (mp4, avi, mov, mkv, webm desteklenir)
-- Dosya boyutu 500MB'dan küçük olmalı
-
-### İşleme Yavaş
-- Pixel boyutunu artırın (daha az detay = daha hızlı)
-- Çiçek yoğunluğunu azaltın
-- Daha kısa videolar kullanın
-
-### Site Kasıyor
-- Çiçek yoğunluğunu azaltın
-- Pixel boyutunu artırın
-- Daha küçük videolar kullanın
-
-## 📝 Notlar
-
-- İlk frame'den çiçekler oluşturulur
-- Çiçek renkleri video pixel renklerine göre ayarlanır
-- Kaydedilen HTML dosyası herhangi bir tarayıcıda açılabilir
-- İnternet bağlantısı olmadan da çalışır (kaydedildikten sonra)
-
-## 🙏 Teşekkürler
-
-Sevdiğinize özel pixel art mesajlar oluşturun! 💕🎨✨
+- **Orijinal video önizlemede görünmüyor**: Tarayıcı bazı formatları (AVI, MKV, WMV, FLV) oynatamaz;
+  dönüştürme yine de çalışır.
+- **Video kaydı uzun sürüyor**: Kayıt gerçek zamanlıdır (10 sn video = 10 sn). Bu sırada sekmeyi açık tut.
+  Daha hızlı sonuç için GIF seç.
+- **Pixel boyutu otomatik büyüdü**: Grid en fazla 320×320 hücre olabilir; çok yüksek çözünürlükte
+  pixel boyutu otomatik artırılır.

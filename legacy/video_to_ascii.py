@@ -1,4 +1,10 @@
 import cv2
+import sys as _sys
+for _s in (_sys.stdout, _sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 import numpy as np
 import os
 import sys
@@ -44,6 +50,8 @@ def video_to_ascii(video_path, output_path=None, width=120, fps=None):
     original_fps = cap.get(cv2.CAP_PROP_FPS)
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     
+    if not original_fps or original_fps <= 0:
+        original_fps = 25.0
     if fps is None:
         fps = original_fps
     
@@ -121,8 +129,15 @@ def main():
         sys.exit(1)
     
     output_path = sys.argv[2] if len(sys.argv) > 2 else None
-    width = int(sys.argv[3]) if len(sys.argv) > 3 else 120
-    fps = float(sys.argv[4]) if len(sys.argv) > 4 else None
+    try:
+        width = int(sys.argv[3]) if len(sys.argv) > 3 else 120
+        fps = float(sys.argv[4]) if len(sys.argv) > 4 else None
+    except ValueError:
+        print("Hata: genişlik tam sayı, fps sayı olmalı")
+        sys.exit(1)
+    if width < 1 or (fps is not None and fps <= 0):
+        print("Hata: genişlik >= 1 ve fps > 0 olmalı")
+        sys.exit(1)
     
     video_to_ascii(video_path, output_path, width, fps)
 

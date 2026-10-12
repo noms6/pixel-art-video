@@ -416,3 +416,46 @@ Frontend `fetch → arrayBuffer → Uint8Array` ile alır; parse maliyeti ~0, be
 | Çiçek frame çizimi | 40–64 ms | < 5 ms |
 | Siteyi kaydet | 5.6 sn / 13 MB | < 0.2 sn / < 300 KB |
 | Exe açılış / boyut | onefile 73 MB | onedir, < 1 sn açılış |
+
+---
+
+## 7. Uygulama durumu — 2026-10-12
+
+Faz 0, Faz 1, Faz 2 ve Faz 3 tamamlandı; Faz 4'ten ilk özellik paketi eklendi. `python -m pytest` → 42 test geçiyor.
+
+### Ölçülen sonuçlar (aynı makine, aynı videolar)
+
+| Metrik | Önce | Sonra |
+|---|---|---|
+| 8 sn 720p video işleme | 16 sn | **1.0 sn** |
+| Hiko Baba (55 sn): yükle → oynat | 34 sn, 190 MB JSON | **1.1 sn, 337 KB** |
+| 60 sn 1080p | 199 sn, 1.5 GB, 2.1 GB RAM, sekme çöktü | **6.8 sn, 479 KB, 25 MB RAM** |
+| Tarayıcı belleği (Hiko) | 355 MB | **5 MB** |
+| Çiçek frame çizimi | 33–63 ms | **~1 ms** (ASCII ~13 ms) |
+| Siteyi kaydet (Hiko) | 33.7 sn donma, 69 MB | **0.14 sn, 448 KB** |
+| Video export süresi (8 sn video) | 10.5 / 12.8 sn | **7.9 sn** (MP4 gerçekten MP4) |
+| Exe klasörü | 73 MB onefile + 157 MB eski çöp içeride | 157 MB onedir, 3 sn açılış |
+
+### Kapanan hatalar
+H1 (cleanup.bat silindi) · H2 (127.0.0.1, debug kapalı) · H3/H23 (ikili format, sınırlar) · H4 (arka plan işi,
+gerçek ilerleme, iptal) · H5/H6/H27 (doğrulama, tüm hatalar JSON) · H7 (global palet) · H8 (hafif kayıt) ·
+H9 (XSS — test edildi) · H10/H19 (tek iş durumu, eski iş sunucuda da iptal) · H11 (UUID klasörler) ·
+H12 (24 saat TTL temizliği, %LOCALAPPDATA%) · H13 (zaman tabanlı fps) · H14 (MP4 çalışıyor, ölü ayarlar
+kaldırıldı) · H15 (Web Share / indirme) · H16 (canvas ekran boyutunda) · H17/H20 (zaman çizelgeli kayıt) ·
+H18 (yükleme önizlemeden bağımsız; AVI/MKV/WMV/FLV çalışıyor) · H21 (UTF-8 konsol, boş port) ·
+H22 (mobil düzen) · H24 (yoğunluk gerçekten çalışıyor, kopya şekil/temalar düzeltildi, seçici tek açılıyor) ·
+H25 (Yeni video / Geri butonları) · H26 (gerçek en-boy oranı, tema arka planı) · H28 (CLI doğrulama, UTF-8)
+
+### Eklenen özellikler
+Hazır paletler (Game Boy, PICO-8, Sweetie 16, CGA, Pastel, Gri, Sepya) · renk sayısı 2–64 · Bayer dithering ·
+parlaklık/kontrast/doygunluk · başlangıç/bitiş kırpma · yeniden dönüştürme (tekrar yüklemeden) · oynatıcı
+(duraklat, sarma, hız) · Braille modu · 4 ASCII seti · LED şekli · GIF export (kendi kodlayıcı) · export
+boyutu seçimi · daktilo efektli mesaj · sayfa başlığı · ayarların hatırlanması · erişilebilirlik (klavye,
+hareket azaltma tercihi)
+
+### Kalan fikirler (Faz 4 devamı)
+Ses/müzik desteği · fotoğraf ve çoklu foto slayt · webcam canlı mod · animasyonlu geçiş efektleri · şablonlar ·
+proje kaydet/aç · tamamen istemci tarafı (sunucusuz) mod · çoklu dil
+
+> Not: Eski `uploads/`, `static/outputs/` (~270 MB) ve `dist/` içindeki eski çıktılar yeni uygulama tarafından
+> kullanılmıyor ve git'e dahil değil; istersen silinebilir.

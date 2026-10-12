@@ -1,4 +1,10 @@
 import cv2
+import sys as _sys
+for _s in (_sys.stdout, _sys.stderr):
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 import numpy as np
 import base64
 import io
@@ -149,7 +155,7 @@ def video_to_ascii_stream(video_path, width=150, fps=None):
     if not cap.isOpened():
         return
     
-    original_fps = cap.get(cv2.CAP_PROP_FPS)
+    original_fps = cap.get(cv2.CAP_PROP_FPS) or 25.0
     if fps is None:
         fps = original_fps
     
@@ -186,6 +192,9 @@ if __name__ == "__main__":
     video_path = sys.argv[1]
     width = int(sys.argv[2]) if len(sys.argv) > 2 else 150
     fps = float(sys.argv[3]) if len(sys.argv) > 3 else None
+    if width < 1 or (fps is not None and fps <= 0):
+        print("Hata: genişlik >= 1 ve fps > 0 olmalı")
+        sys.exit(1)
     
     if not os.path.exists(video_path):
         print(f"Hata: Dosya bulunamadı: {video_path}")

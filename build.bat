@@ -1,41 +1,23 @@
 @echo off
 chcp 65001 >nul
 echo ========================================
-echo   Video ASCII Art Converter - EXE Build
+echo   Pixel Art Video - EXE Build
 echo ========================================
 echo.
-
-REM Python kontrolü
 python --version >nul 2>&1
 if errorlevel 1 (
-    echo [HATA] Python bulunamadı!
-    echo Python'u yükleyin: https://www.python.org/downloads/
+    echo [HATA] Python bulunamadi: https://www.python.org/downloads/
     pause
     exit /b 1
 )
-
-echo [OK] Python bulundu
+python -m pip install -q -r requirements-dev.txt || goto :fail
+python build_exe.py %* || goto :fail
 echo.
-
-REM PyInstaller yükleme
-echo PyInstaller kontrol ediliyor...
-python -m pip show pyinstaller >nul 2>&1
-if errorlevel 1 (
-    echo PyInstaller yükleniyor...
-    python -m pip install pyinstaller
-)
-
-echo.
-echo Exe oluşturuluyor...
-echo.
-
-REM Exe oluştur
-python build_exe.py
-
-echo.
-echo ========================================
-echo   Build tamamlandı!
-echo   Exe dosyası: dist\VideoASCIIArtConverter.exe
-echo ========================================
+echo   Tamamlandi: dist\VideoASCIIArtConverter\VideoASCIIArtConverter.exe
+echo   (Klasorun tamamini birlikte tasiyin.)
 pause
-
+exit /b 0
+:fail
+echo [HATA] Build basarisiz.
+pause
+exit /b 1
