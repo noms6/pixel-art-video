@@ -9,6 +9,7 @@ hazır olunca tarayıcıyı açar. Ortam değişkenleri:
     PIXELART_DATA_DIR=...     çalışma verisinin klasörü
 """
 
+import locale
 import os
 import socket
 import subprocess
@@ -20,6 +21,43 @@ import webbrowser
 from pathlib import Path
 
 FROZEN = getattr(sys, 'frozen', False)
+# Konsol mesajları: sistem dili Türkçe ise Türkçe, değilse İngilizce (arayüz 24 dili tarayıcıda seçer)
+MESSAGES = {
+    'tr': {
+        'installing': '📦 Eksik paketler kuruluyor: {pkgs}',
+        'install_failed': '✗ Paketler kurulamadı: {err}\n  Elle kurmak için: pip install -r requirements.txt',
+        'running': '✓ Uygulama çalışıyor: {url}',
+        'data': '  Veriler: {path} (24 saatten eski dosyalar otomatik silinir)',
+        'close': '  Kapatmak için bu pencereyi kapatın veya Ctrl+C\n',
+        'bye': '\n👋 Kapatılıyor...',
+        'error': '\n✗ Beklenmeyen hata: {err}',
+        'press_enter': '\nKapatmak için Enter\'a basın...',
+    },
+    'en': {
+        'installing': '📦 Installing missing packages: {pkgs}',
+        'install_failed': '✗ Could not install packages: {err}\n  Install manually: pip install -r requirements.txt',
+        'running': '✓ App is running: {url}',
+        'data': '  Data: {path} (files older than 24 hours are deleted automatically)',
+        'close': '  Close this window or press Ctrl+C to quit\n',
+        'bye': '\n👋 Shutting down...',
+        'error': '\n✗ Unexpected error: {err}',
+        'press_enter': '\nPress Enter to close...',
+    },
+}
+
+
+def console_language():
+    try:
+        name = (locale.getlocale()[0] or os.environ.get('LANG', '')).lower()
+    except Exception:
+        name = ''
+    return 'tr' if name.startswith(('tr', 'turkish')) else 'en'
+
+
+def msg(key, **params):
+    return MESSAGES[console_language()][key].format(**params)
+
+
 REQUIRED = {'cv2': 'opencv-python-headless', 'numpy': 'numpy', 'flask': 'flask', 'waitress': 'waitress'}
 
 
@@ -35,7 +73,7 @@ def configure_console():
 def pause_before_exit():
     if FROZEN:
         try:
-            input('\nKapatmak için Enter\'a basın...')
+            input(msg('press_enter'))
         except Exception:
             time.sleep(5)
 
@@ -49,13 +87,13 @@ def ensure_packages():
             missing.append(package)
     if not missing:
         return True
-    print(f'📦 Eksik paketler kuruluyor: {", ".join(missing)}')
+    print(msg('installing', pkgs=', '.join(missing)))
     requirements = Path(__file__).parent / 'requirements.txt'
     try:
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', str(requirements)])
         return True
     except subprocess.CalledProcessError as e:
-        print(f'✗ Paketler kurulamadı: {e}\n  Elle kurmak için: pip install -r requirements.txt')
+        print(msg('install_failed', err=e))
         return False
 
 
@@ -98,9 +136,9 @@ def main():
     app = create_app()
     port = find_free_port(int(os.environ.get('PORT', 5000)))
     url = f'http://127.0.0.1:{port}/'
-    print(f'✓ Uygulama çalışıyor: {url}')
-    print(f'  Veriler: {default_data_dir()} (24 saatten eski dosyalar otomatik silinir)')
-    print('  Kapatmak için bu pencereyi kapatın veya Ctrl+C\n')
+    print(msg('running', url=url))
+    print(msg('data', path=default_data_dir()))
+    print(msg('close'))
     if os.environ.get('PIXELART_NO_BROWSER') != '1':
         threading.Thread(target=open_browser_when_ready, args=(url,), daemon=True).start()
 
@@ -116,10 +154,10 @@ if __name__ == '__main__':
     try:
         sys.exit(main())
     except KeyboardInterrupt:
-        print('\n👋 Kapatılıyor...')
+        print(msg('bye'))
     except Exception as e:
         import traceback
         traceback.print_exc()
-        print(f'\n✗ Beklenmeyen hata: {e}')
+        print(msg('error', err=e))
         pause_before_exit()
         sys.exit(1)

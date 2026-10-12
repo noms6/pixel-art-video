@@ -25,7 +25,15 @@ import numpy as np
 
 
 class ConversionError(Exception):
-    """Kullanıcıya gösterilebilecek dönüştürme hatası."""
+    """
+    Kullanıcıya gösterilebilecek dönüştürme hatası.
+    code + params arayüzde seçilen dile çevrilir; message Türkçe yedek metindir (log, eski istemciler).
+    """
+
+    def __init__(self, code, message, **params):
+        super().__init__(message)
+        self.code = code
+        self.params = params
 
 
 class ConversionCancelled(Exception):
@@ -70,7 +78,7 @@ def preset_palette(name):
         return [(a + (b - a) * t).astype(int).tolist() for t in np.linspace(0, 1, 8)]
     if name in PRESET_PALETTES:
         return [_hex_to_rgb(h) for h in PRESET_PALETTES[name]]
-    raise ConversionError(f'Bilinmeyen palet: {name}')
+    raise ConversionError('unknown_palette', f'Bilinmeyen palet: {name}', value=name)
 
 
 @dataclass
@@ -102,9 +110,10 @@ class ConversionParams:
             try:
                 value = cast(float(raw)) if cast is int else cast(raw)
             except (TypeError, ValueError):
-                raise ConversionError(f'Geçersiz değer: {name}={raw!r}')
+                raise ConversionError('invalid_value', f'Geçersiz değer: {name}={raw!r}', name=name, value=str(raw))
             if not math.isfinite(value) or value < lo or value > hi:
-                raise ConversionError(f'{name} {lo}–{hi} aralığında olmalı (gelen: {raw})')
+                raise ConversionError('out_of_range', f'{name} {lo}–{hi} aralığında olmalı (gelen: {raw})',
+                                      name=name, lo=lo, hi=hi, value=str(raw))
             return value
 
         p = cls(
@@ -121,11 +130,11 @@ class ConversionParams:
             dither=str(form.get('dither') or 'none'),
         )
         if p.palette != 'auto' and p.palette not in PRESET_PALETTES:
-            raise ConversionError(f'Bilinmeyen palet: {p.palette}')
+            raise ConversionError('unknown_palette', f'Bilinmeyen palet: {p.palette}', value=p.palette)
         if p.dither not in ('none', 'bayer4', 'bayer8'):
-            raise ConversionError(f'Bilinmeyen dithering: {p.dither}')
+            raise ConversionError('unknown_dither', f'Bilinmeyen dithering: {p.dither}', value=p.dither)
         if p.end and p.end <= p.start:
-            raise ConversionError('Bitiş zamanı başlangıçtan büyük olmalı')
+            raise ConversionError('end_before_start', 'Bitiş zamanı başlangıçtan büyük olmalı')
         return p
 
 
@@ -143,10 +152,10 @@ def probe(path):
     cap = cv2.VideoCapture(path)
     try:
         if not cap.isOpened():
-            raise ConversionError('Video açılamadı (dosya bozuk veya desteklenmeyen format)')
+            raise ConversionError('open_failed', 'Video açılamadı (dosya bozuk veya desteklenmeyen format)')
         ok, frame = cap.read()
         if not ok or frame is None:
-            raise ConversionError('Videodan hiç frame okunamadı (dosya bozuk olabilir)')
+            raise ConversionError('no_frames_read', 'Videodan hiç frame okunamadı (dosya bozuk olabilir)')
         h, w = frame.shape[:2]
         fps = cap.get(cv2.CAP_PROP_FPS) or 0
         if not math.isfinite(fps) or fps <= 0 or fps > 1000:
@@ -260,9 +269,9 @@ class ConversionResult:
 def convert(video_path, out_dir, params, progress=None, cancelled=None):
     """
     Videoyu dönüştür ve out_dir'e meta.json + frames.bin(.gz) yaz.
-    progress(oran 0..1, aşama_metni) ve cancelled() -> bool isteğe bağlı callback'lerdir.
+    progress(oran 0..1, aşama_kodu, **parametreler) ve cancelled() -> bool isteğe bağlı callback'lerdir.
     """
-    progress = progress or (lambda *_: None)
+    progress = progress or (lambda *_, **__: None)
     cancelled = cancelled or (lambda: False)
     info = probe(video_path)
     gw, gh, eff_ps = grid_size(info.width, info.height, params.pixel_size)
@@ -273,7 +282,9 @@ def convert(video_path, out_dir, params, progress=None, cancelled=None):
     start = params.start
     end = params.end or (info.duration if info.duration else float('inf'))
     if info.duration and start >= info.duration:
-        raise ConversionError(f'Başlangıç ({start:g} sn) video süresinden ({info.duration:.1f} sn) büyük')
+        raise ConversionError('start_after_duration',
+                              f'Başlangıç ({start:g} sn) video süresinden ({info.duration:.1f} sn) büyük',
+                              start=round(start, 2), duration=round(info.duration, 1))
     max_frames = min(params.max_frames or ConversionParams.MAX_FRAMES, ConversionParams.MAX_FRAMES)
     expected = max(1, min(max_frames, int(((min(end, info.duration or end) - start) or 1) * target_fps) + 1))
 
@@ -281,7 +292,7 @@ def convert(video_path, out_dir, params, progress=None, cancelled=None):
     raw_path = os.path.join(out_dir, 'rgb.tmp')
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
-        raise ConversionError('Video açılamadı')
+        raise ConversionError('open_failed', 'Video açılamadı')
     count = 0
     truncated = False
     try:
@@ -314,7 +325,7 @@ def convert(video_path, out_dir, params, progress=None, cancelled=None):
                 raw.write(rgb.tobytes())
                 count += 1
                 if count % 5 == 0:
-                    progress(min(0.8, 0.8 * count / expected), f'Frame okunuyor… {count}')
+                    progress(min(0.8, 0.8 * count / expected), 'reading', n=count)
         # Sınıra takıldıysa videonun devamı var mı?
         if count >= max_frames and cap.grab():
             truncated = (index / src_fps) <= end
@@ -323,10 +334,10 @@ def convert(video_path, out_dir, params, progress=None, cancelled=None):
 
     try:
         if count == 0:
-            raise ConversionError('Seçilen aralıkta hiç frame bulunamadı')
+            raise ConversionError('no_frames_in_range', 'Seçilen aralıkta hiç frame bulunamadı')
         frames = np.memmap(raw_path, np.uint8, 'r', shape=(count, gh, gw, 3))
 
-        progress(0.82, 'Palet hesaplanıyor…')
+        progress(0.82, 'palette')
         if params.palette == 'auto':
             pick = np.unique(np.linspace(0, count - 1, min(count, 24)).astype(int))
             palette = extract_palette(np.asarray(frames[pick]), params.colors)
@@ -341,10 +352,10 @@ def convert(video_path, out_dir, params, progress=None, cancelled=None):
                     raise ConversionCancelled()
                 out.write(map_to_palette(np.asarray(frames[i]), lut, params.dither).tobytes())
                 if i % 20 == 0:
-                    progress(0.82 + 0.15 * i / count, f'Renkler eşleniyor… {i}/{count}')
+                    progress(0.82 + 0.15 * i / count, 'mapping', i=i, n=count)
         del frames
 
-        progress(0.97, 'Sıkıştırılıyor…')
+        progress(0.97, 'compressing')
         with open(bin_path, 'rb') as src, gzip.open(bin_path + '.gz', 'wb', compresslevel=6) as dst:
             shutil.copyfileobj(src, dst, 1 << 20)
     finally:
@@ -363,5 +374,5 @@ def convert(video_path, out_dir, params, progress=None, cancelled=None):
     )
     with open(os.path.join(out_dir, 'meta.json'), 'w', encoding='utf-8') as f:
         json.dump(asdict(result), f, ensure_ascii=False)
-    progress(1.0, 'Tamamlandı')
+    progress(1.0, 'done')
     return result

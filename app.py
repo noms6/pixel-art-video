@@ -57,22 +57,26 @@ def create_app(data_dir=None, workers=2):
     manager = JobManager(str(data_dir or default_data_dir()), workers=workers)
     app.extensions['jobs'] = manager
 
-    def error(message, status=400):
-        return jsonify({'error': message}), status
+    def error(message, status=400, code=None, **params):
+        return jsonify({'error': message, 'code': code, 'params': params}), status
+
+    def conversion_error(e, status=400):
+        return error(str(e), status, e.code, **e.params)
 
     @app.errorhandler(HTTPException)
     def http_error(e):
-        messages = {
-            413: f'Dosya çok büyük (en fazla {MAX_UPLOAD_MB} MB)',
-            404: 'Bulunamadı',
-            405: 'Bu istek türü desteklenmiyor',
+        known = {
+            413: ('too_big', f'Dosya çok büyük (en fazla {MAX_UPLOAD_MB} MB)', {'mb': MAX_UPLOAD_MB}),
+            404: ('not_found', 'Bulunamadı', {}),
+            405: ('method', 'Bu istek türü desteklenmiyor', {}),
         }
-        return error(messages.get(e.code, e.description or e.name), e.code)
+        code, message, params = known.get(e.code, ('http', e.description or e.name, {'status': e.code}))
+        return error(message, e.code, code, **params)
 
     @app.errorhandler(Exception)
     def unexpected_error(e):
         app.logger.exception('Beklenmeyen hata')
-        return error(f'Sunucu hatası: {e}', 500)
+        return error(f'Sunucu hatası: {e}', 500, 'server', msg=str(e))
 
     @app.route('/')
     def index():
@@ -93,15 +97,16 @@ def create_app(data_dir=None, workers=2):
     def upload():
         file = request.files.get('video')
         if file is None or not file.filename:
-            return error('Video dosyası seçilmedi')
+            return error('Video dosyası seçilmedi', 400, 'no_file')
         ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
         if ext not in ALLOWED_EXTENSIONS:
-            return error(f'Desteklenmeyen dosya türü: .{ext or "?"} (desteklenenler: '
-                         f'{", ".join(sorted(ALLOWED_EXTENSIONS))})')
+            supported = ', '.join(sorted(ALLOWED_EXTENSIONS))
+            return error(f'Desteklenmeyen dosya türü: .{ext or "?"} (desteklenenler: {supported})', 400,
+                         'bad_ext', ext=ext or '?', list=supported)
         try:
             data = manager.save_upload(file, ext)
         except ConversionError as e:
-            return error(str(e), 422)
+            return conversion_error(e, 422)
         return jsonify(data), 201
 
     @app.post('/api/jobs')
@@ -110,12 +115,12 @@ def create_app(data_dir=None, workers=2):
         form = data if isinstance(data, dict) else request.form
         upload_id = form.get('upload_id', '')
         if not is_valid_id(upload_id):
-            return error('Geçersiz upload_id')
+            return error('Geçersiz upload_id', 400, 'bad_upload_id')
         try:
             params = ConversionParams.from_form(form)
             job = manager.submit(upload_id, params)
         except ConversionError as e:
-            return error(str(e))
+            return conversion_error(e)
         return jsonify(job.to_dict()), 202
 
     def find_job(job_id):
@@ -125,22 +130,22 @@ def create_app(data_dir=None, workers=2):
     @app.get('/api/jobs/<job_id>')
     def job_status(job_id):
         job = find_job(job_id)
-        return jsonify(job.to_dict()) if job else error('İş bulunamadı', 404)
+        return jsonify(job.to_dict()) if job else error('İş bulunamadı', 404, 'job_not_found')
 
     @app.delete('/api/jobs/<job_id>')
     def job_cancel(job_id):
         job = manager.cancel(job_id) if is_valid_id(job_id) else None
-        return jsonify(job.to_dict()) if job else error('İş bulunamadı', 404)
+        return jsonify(job.to_dict()) if job else error('İş bulunamadı', 404, 'job_not_found')
 
     def finished_file(job_id, name):
         job = find_job(job_id)
         if not job:
-            return None, error('İş bulunamadı', 404)
+            return None, error('İş bulunamadı', 404, 'job_not_found')
         if job.state != 'done':
-            return None, error('İş henüz tamamlanmadı', 409)
+            return None, error('İş henüz tamamlanmadı', 409, 'not_done')
         path = os.path.join(manager.job_dir(job_id), name)
         if not os.path.exists(path):
-            return None, error('Sonuç dosyası bulunamadı (süresi dolmuş olabilir)', 410)
+            return None, error('Sonuç dosyası bulunamadı (süresi dolmuş olabilir)', 410, 'result_gone')
         return path, None
 
     @app.get('/api/jobs/<job_id>/meta')

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,38 +11,39 @@
     <header class="topbar">
         <div class="brand">🎨 <span>Pixel Art Video</span></div>
         <div class="topbar-controls">
-            <label class="compact">Tema <select id="themeSelect"></select></label>
-            <label class="compact">Arka plan <select id="bgSelect"></select></label>
+            <label class="compact">🌐 <span class="sr-only" data-i18n="lang.label">Language</span><select id="langSelect"></select></label>
+            <label class="compact"><span data-i18n="top.theme">Theme</span> <select id="themeSelect"></select></label>
+            <label class="compact"><span data-i18n="top.background">Background</span> <select id="bgSelect"></select></label>
         </div>
     </header>
 
     <main class="container">
         <!-- 1. Yükleme -->
         <section id="stepUpload" class="card step">
-            <h1 class="title">Pixel Art Video Mesajı</h1>
-            <p class="subtitle">Videonu pixel art'a, çiçeklere ya da ASCII'ye dönüştür, mesajını ekle ve sevdiğine gönder 💕</p>
-            <div class="upload-box" id="uploadBox" tabindex="0" role="button" aria-label="Video seç">
+            <h1 class="title" data-i18n="upload.title">Pixel Art Video Message</h1>
+            <p class="subtitle" data-i18n="upload.subtitle"></p>
+            <div class="upload-box" id="uploadBox" tabindex="0" role="button" data-i18n-aria="upload.aria">
                 <div class="upload-icon">📹</div>
-                <h3>Video Yükle</h3>
-                <p>Videonu buraya sürükle ya da tıkla</p>
-                <span class="btn btn-primary">Dosya Seç</span>
+                <h3 data-i18n="upload.box_title">Upload a video</h3>
+                <p data-i18n="upload.box_text"></p>
+                <span class="btn btn-primary" data-i18n="upload.choose">Choose file</span>
                 <input type="file" id="videoInput" accept="video/*,.mkv,.avi,.flv,.wmv,.ts,.3gp,.m4v,.mpg,.mpeg" hidden>
             </div>
-            <p class="hint" id="formatHint">MP4, MOV, WebM, AVI, MKV, WMV, FLV · en fazla 500 MB</p>
+            <p class="hint" id="formatHint"></p>
         </section>
 
         <!-- Dönüştürme ayarları (yükleme ve önizleme adımlarında görünür) -->
         <section id="convCard" class="card">
             <details id="convSettings">
-                <summary>⚙️ Dönüştürme ayarları <span class="summary-note" id="convSummary"></span></summary>
+                <summary><span data-i18n="conv.title">⚙️ Conversion settings</span> <span class="summary-note" id="convSummary"></span></summary>
                 <div class="field-grid">
-                    <label class="field">Pixel boyutu <output id="pixelSizeOut">8</output>
+                    <label class="field"><span data-i18n="conv.pixel_size"></span> <output id="pixelSizeOut">8</output>
                         <input type="range" id="pixelSize" min="2" max="32" step="1" value="8">
-                        <small>Küçük = daha detaylı</small>
+                        <small data-i18n="conv.pixel_hint"></small>
                     </label>
-                    <label class="field">FPS
+                    <label class="field"><span data-i18n="conv.fps"></span>
                         <select id="fps">
-                            <option value="0">Orijinal</option>
+                            <option value="0" data-i18n="conv.original">Original</option>
                             <option value="5">5</option>
                             <option value="8">8</option>
                             <option value="10" selected>10</option>
@@ -52,93 +53,93 @@
                             <option value="30">30</option>
                         </select>
                     </label>
-                    <label class="field">Palet
+                    <label class="field"><span data-i18n="conv.palette"></span>
                         <select id="palette"></select>
                         <div class="swatches" id="paletteSwatches"></div>
                     </label>
-                    <label class="field" id="colorsField">Renk sayısı <output id="colorsOut">16</output>
+                    <label class="field" id="colorsField"><span data-i18n="conv.colors"></span> <output id="colorsOut">16</output>
                         <input type="range" id="colors" min="2" max="64" step="1" value="16">
                     </label>
-                    <label class="field">Dithering
+                    <label class="field"><span data-i18n="conv.dither"></span>
                         <select id="dither">
-                            <option value="none">Yok</option>
-                            <option value="bayer4">Bayer 4×4 (retro)</option>
-                            <option value="bayer8">Bayer 8×8 (yumuşak)</option>
+                            <option value="none" data-i18n="conv.dither_none">None</option>
+                            <option value="bayer4" data-i18n="conv.dither_bayer4">Bayer 4×4</option>
+                            <option value="bayer8" data-i18n="conv.dither_bayer8">Bayer 8×8</option>
                         </select>
                     </label>
-                    <label class="field">Başlangıç (sn)
+                    <label class="field"><span data-i18n="conv.start"></span>
                         <input type="number" id="start" min="0" step="0.1" value="0">
                     </label>
-                    <label class="field">Bitiş (sn) <small>0 = sonuna kadar</small>
+                    <label class="field"><span data-i18n="conv.end"></span> <small data-i18n="conv.end_hint"></small>
                         <input type="number" id="end" min="0" step="0.1" value="0">
                     </label>
-                    <label class="field">Maks. frame <small>0 = sınırsız</small>
+                    <label class="field"><span data-i18n="conv.max_frames"></span> <small data-i18n="conv.max_frames_hint"></small>
                         <input type="number" id="maxFrames" min="0" max="3000" step="1" value="0">
                     </label>
-                    <label class="field">Parlaklık <output id="brightnessOut">0</output>
+                    <label class="field"><span data-i18n="conv.brightness"></span> <output id="brightnessOut">0</output>
                         <input type="range" id="brightness" min="-100" max="100" value="0">
                     </label>
-                    <label class="field">Kontrast <output id="contrastOut">0</output>
+                    <label class="field"><span data-i18n="conv.contrast"></span> <output id="contrastOut">0</output>
                         <input type="range" id="contrast" min="-100" max="100" value="0">
                     </label>
-                    <label class="field">Doygunluk <output id="saturationOut">100</output>%
+                    <label class="field"><span data-i18n="conv.saturation"></span> <output id="saturationOut">100</output>%
                         <input type="range" id="saturation" min="0" max="200" value="100">
                     </label>
                 </div>
                 <div class="row-buttons">
-                    <button class="btn" id="resetConvBtn" type="button">↺ Varsayılanlar</button>
-                    <button class="btn btn-primary" id="reconvertBtn" type="button" hidden>🔄 Bu ayarlarla yeniden dönüştür</button>
+                    <button class="btn" id="resetConvBtn" type="button" data-i18n="conv.reset"></button>
+                    <button class="btn btn-primary" id="reconvertBtn" type="button" data-i18n="conv.reconvert" hidden></button>
                 </div>
             </details>
         </section>
 
         <!-- 2. İşleniyor -->
         <section id="stepProcess" class="card step" hidden>
-            <h2 class="step-title">Dönüştürülüyor…</h2>
+            <h2 class="step-title" data-i18n="process.title"></h2>
             <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-            <p class="progress-text" id="progressText">Hazırlanıyor…</p>
-            <div class="row-buttons"><button class="btn" id="cancelBtn" type="button">✖ İptal</button></div>
+            <p class="progress-text" id="progressText"></p>
+            <div class="row-buttons"><button class="btn" id="cancelBtn" type="button" data-i18n="process.cancel"></button></div>
         </section>
 
         <!-- 3. Önizleme -->
         <section id="stepPreview" class="card step" hidden>
-            <h2 class="step-title">Önizleme</h2>
+            <h2 class="step-title" data-i18n="preview.title"></h2>
             <div class="preview-grid">
                 <figure class="preview-figure">
-                    <figcaption>Orijinal</figcaption>
+                    <figcaption data-i18n="preview.original"></figcaption>
                     <video id="originalVideo" muted loop playsinline controls></video>
-                    <p class="hint" id="originalNote" hidden>Tarayıcı bu formatı önizleyemiyor — dönüştürme yine de çalıştı.</p>
+                    <p class="hint" id="originalNote" data-i18n="preview.cannot_play" hidden></p>
                 </figure>
                 <figure class="preview-figure">
-                    <figcaption>Pixel art</figcaption>
+                    <figcaption data-i18n="preview.pixel"></figcaption>
                     <div class="canvas-box" id="pixelBox"><canvas id="pixelCanvas"></canvas></div>
                 </figure>
             </div>
             <div class="player" id="previewPlayer"></div>
             <p class="info-line" id="infoLine"></p>
             <div class="row-buttons">
-                <button class="btn" id="newVideoBtn" type="button">📁 Yeni video</button>
-                <button class="btn btn-start" id="startBtn" type="button">✨ START ✨</button>
+                <button class="btn" id="newVideoBtn" type="button" data-i18n="preview.new_video"></button>
+                <button class="btn btn-start" id="startBtn" type="button" data-i18n="preview.start"></button>
             </div>
         </section>
 
         <!-- 4. Sonuç -->
         <section id="stepResult" class="step" hidden>
             <div class="output-header">
-                <h2 class="output-title">✨ Pixel Art Video Mesajın Hazır! ✨</h2>
-                <p class="output-subtitle">Stili seç, mesajını yaz ve paylaş</p>
+                <h2 class="output-title" data-i18n="result.title"></h2>
+                <p class="output-subtitle" data-i18n="result.subtitle"></p>
             </div>
 
             <div class="card style-card">
                 <div class="field-grid">
-                    <label class="field">Stil <select id="modeSelect"></select></label>
-                    <label class="field" id="scaleField">Boyut <output id="scaleOut">3</output>
+                    <label class="field"><span data-i18n="style.label"></span> <select id="modeSelect"></select></label>
+                    <label class="field" id="scaleField"><span data-i18n="style.size"></span> <output id="scaleOut">3</output>
                         <input type="range" id="scale" min="1" max="10" step="1" value="3">
                     </label>
-                    <label class="field" id="densityField">Yoğunluk <output id="densityOut">100</output>%
+                    <label class="field" id="densityField"><span data-i18n="style.density"></span> <output id="densityOut">100</output>%
                         <input type="range" id="density" min="10" max="100" step="5" value="100">
                     </label>
-                    <label class="field" id="mixField">Video rengi <output id="mixOut">70</output>%
+                    <label class="field" id="mixField"><span data-i18n="style.mix"></span> <output id="mixOut">70</output>%
                         <input type="range" id="mix" min="0" max="100" step="5" value="70">
                     </label>
                 </div>
@@ -150,49 +151,51 @@
             </div>
 
             <div class="card message-card">
-                <label class="field">💌 Mesajın
-                    <textarea id="messageText" rows="4" maxlength="2000" placeholder="Sevdiğine özel bir mesaj yaz… 💕"></textarea>
+                <label class="field"><span data-i18n="message.label"></span>
+                    <textarea id="messageText" rows="4" maxlength="2000" data-i18n-placeholder="message.placeholder"></textarea>
                 </label>
                 <div class="field-row">
-                    <label class="field">Sayfa başlığı <input type="text" id="pageTitle" maxlength="80" placeholder="Sana özel 💕"></label>
-                    <label class="check"><input type="checkbox" id="typewriter" checked> Daktilo efekti</label>
+                    <label class="field"><span data-i18n="message.page_title"></span>
+                        <input type="text" id="pageTitle" maxlength="80" data-i18n-placeholder="message.page_title_placeholder">
+                    </label>
+                    <label class="check"><input type="checkbox" id="typewriter" checked> <span data-i18n="message.typewriter"></span></label>
                 </div>
             </div>
 
             <div class="card export-card">
                 <div class="field-grid">
-                    <label class="field">Format
+                    <label class="field"><span data-i18n="export.format"></span>
                         <select id="exportFormat">
-                            <option value="mp4">MP4 video</option>
-                            <option value="webm">WebM video</option>
-                            <option value="gif">GIF animasyon</option>
+                            <option value="mp4" data-i18n="export.mp4">MP4</option>
+                            <option value="webm" data-i18n="export.webm">WebM</option>
+                            <option value="gif" data-i18n="export.gif">GIF</option>
                         </select>
                     </label>
-                    <label class="field">Boyut
+                    <label class="field"><span data-i18n="export.size"></span>
                         <select id="exportSize">
-                            <option value="480">Küçük (480 px)</option>
-                            <option value="720" selected>Orta (720 px)</option>
-                            <option value="1280">Büyük (1280 px)</option>
-                            <option value="1920">Full HD (1920 px)</option>
+                            <option value="480" data-i18n="export.size_480">480 px</option>
+                            <option value="720" data-i18n="export.size_720" selected>720 px</option>
+                            <option value="1280" data-i18n="export.size_1280">1280 px</option>
+                            <option value="1920" data-i18n="export.size_1920">1920 px</option>
                         </select>
                     </label>
                 </div>
                 <div class="row-buttons">
-                    <button class="btn btn-primary" id="downloadBtn" type="button">🎬 İndir</button>
-                    <button class="btn btn-primary" id="saveBtn" type="button">💾 Siteyi kaydet</button>
-                    <button class="btn btn-primary" id="shareBtn" type="button">📤 Paylaş</button>
+                    <button class="btn btn-primary" id="downloadBtn" type="button" data-i18n="export.download"></button>
+                    <button class="btn btn-primary" id="saveBtn" type="button" data-i18n="export.save"></button>
+                    <button class="btn btn-primary" id="shareBtn" type="button" data-i18n="export.share"></button>
                 </div>
                 <div class="export-progress" id="exportProgress" hidden>
                     <div class="progress-bar small"><div class="progress-fill" id="exportFill"></div></div>
                     <span id="exportText"></span>
-                    <button class="btn btn-small" id="exportCancelBtn" type="button">✖</button>
+                    <button class="btn btn-small" id="exportCancelBtn" type="button" data-i18n-aria="process.cancel">✖</button>
                 </div>
-                <p class="hint">Video kaydı gerçek zamanlı yapılır; bu sırada sekmeyi açık tut.</p>
+                <p class="hint" data-i18n="export.realtime_hint"></p>
             </div>
 
             <div class="row-buttons">
-                <button class="btn" id="backBtn" type="button">← Önizlemeye dön</button>
-                <button class="btn" id="newVideoBtn2" type="button">📁 Yeni video</button>
+                <button class="btn" id="backBtn" type="button" data-i18n="result.back"></button>
+                <button class="btn" id="newVideoBtn2" type="button" data-i18n="preview.new_video"></button>
             </div>
         </section>
     </main>

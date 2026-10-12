@@ -1,5 +1,10 @@
 # 🎨 Pixel Art Video — Romantik Mesaj Uygulaması
 
+> **English:** Turn any video into pixel art, flower mosaics or ASCII art, add a personal message and share it as
+> MP4/WebM, GIF or a single offline HTML page. Runs locally on Windows (exe) or with Python. The interface is
+> available in **24 languages** and picks your browser language automatically. Download it from
+> [Releases](../../releases).
+
 Videonu pixel art'a, çiçek/şekil mozaiğine ya da ASCII sanatına dönüştür, mesajını ekle;
 video, GIF ya da tek dosyalık bir web sayfası olarak sevdiğine gönder.
 
@@ -16,6 +21,9 @@ video, GIF ya da tek dosyalık bir web sayfası olarak sevdiğine gönder.
 - **Dışa aktarma**: MP4 / WebM video (orijinal süresinde), GIF (sonsuz döngü), 480–1920 px
 - **Siteyi kaydet**: mesajlı, daktilo efektli, tek dosyalık HTML (~100–500 KB, internetsiz çalışır)
 - **Paylaş**: telefonda doğrudan paylaşım menüsü, masaüstünde dosya indirme
+- **24 dil**: Türkçe, English, Deutsch, Français, Español, Italiano, Português, Nederlands, Polski, Română,
+  Svenska, Ελληνικά, Русский, Українська, Azərbaycanca, العربية, فارسی, हिन्दी, 日本語, 한국어, 中文, Bahasa Indonesia,
+  Tiếng Việt, ไทย — tarayıcı diline göre otomatik seçilir, Arapça/Farsça sağdan sola
 - **20 tema, 15 hareketli arka plan**, mobil uyumlu arayüz, ayarlar tarayıcıda hatırlanır
 
 ## 📥 İndir (Windows)
@@ -79,6 +87,7 @@ static/js/
   api.js          sunucu istemcisi (yükleme ilerlemesi, iş takibi)
   renderer.js     canvas çizim motoru + oynatıcı (kaydedilen sayfaya da gömülür)
   shapes.js       şekil, ASCII seti, tema ve arka plan tanımları
+  i18n.js         dil seçimi ve çeviri (static/i18n/<dil>.json, 24 dil)
   export.js       video kaydı, GIF kodlayıcı, tek dosyalık sayfa
 legacy/           eski terminal ASCII scriptleri
 tests/            pytest testleri
@@ -93,6 +102,9 @@ adet `uint8` palet indeksi, gzip ile sunulur) üretir. 8 sn'lik 720p video için
 pip install -r requirements-dev.txt
 python -m pytest
 ```
+
+Yeni dil eklemek: `static/i18n/en.json`'u kopyalayıp çevir, kodunu `static/js/i18n.js` içindeki `LANGUAGES`
+listesine ekle. `tests/test_i18n.py` eksik anahtar veya hatalı `{parametre}` olup olmadığını denetler.
 
 Kapsam: dönüştürücü (fps, kırpma, küçük/tek renk videolar, paletler, doğrulama, iptal), API (tam akış,
 JSON hatalar, 413, eşzamanlı yüklemeler, TTL temizliği) ve GIF kodlayıcının Pillow ile piksel piksel doğrulanması

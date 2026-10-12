@@ -1,5 +1,7 @@
 // Dışa aktarma: video (WebM/MP4), GIF ve tek dosyalık HTML sayfası.
 
+import { t } from './i18n.js';
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 export function downloadBlob(blob, filename) {
@@ -15,7 +17,7 @@ export function downloadBlob(blob, filename) {
 }
 
 function checkAbort(signal) {
-    if (signal && signal.aborted) throw new DOMException('İptal edildi', 'AbortError');
+    if (signal && signal.aborted) throw new DOMException('Aborted', 'AbortError');
 }
 
 // ---------------------------------------------------------------- video
@@ -28,7 +30,7 @@ const VIDEO_TYPES = {
 export function supportedVideoFormat(format) {
     if (typeof MediaRecorder === 'undefined') return null;
     for (const fmt of [format, format === 'mp4' ? 'webm' : 'mp4']) {
-        const mime = VIDEO_TYPES[fmt].find((t) => MediaRecorder.isTypeSupported(t));
+        const mime = VIDEO_TYPES[fmt].find((type) => MediaRecorder.isTypeSupported(type));
         if (mime) return { format: fmt, mime };
     }
     return null;
@@ -38,7 +40,7 @@ export function supportedVideoFormat(format) {
 // orijinal videoyla aynı olur (çizim süresi gecikmeye eklenmez).
 export async function recordVideo({ renderer, frameCount, fps, format, onProgress, signal }) {
     const chosen = supportedVideoFormat(format);
-    if (!chosen) throw new Error('Bu tarayıcı video kaydını desteklemiyor');
+    if (!chosen) throw new Error(t('export.no_recorder'));
     const canvas = renderer.canvas;
     const stream = canvas.captureStream(0);
     const track = stream.getVideoTracks()[0];
@@ -242,7 +244,7 @@ function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-export async function buildStandaloneHtml({ video, style, theme, message, typewriter, title }) {
+export async function buildStandaloneHtml({ video, style, theme, message, typewriter, title, lang = 'en', rtl = false, strings }) {
     const raw = video.frames;
     const packed = await gzip(raw);
     const rendererSrc = (await (await fetch('/static/js/renderer.js')).text())
@@ -255,10 +257,11 @@ export async function buildStandaloneHtml({ video, style, theme, message, typewr
         typewriter: !!typewriter,
         gzip: !!packed,
         data: toBase64(packed || raw),
+        strings,
     };
-    const safeTitle = escapeHtml(title || 'Sana özel 💕');
+    const safeTitle = escapeHtml(title || '💕');
     return `<!DOCTYPE html>
-<html lang="tr">
+<html lang="${escapeHtml(lang)}" dir="${rtl ? 'rtl' : 'ltr'}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -279,7 +282,7 @@ canvas{display:block;margin:0 auto;max-width:100%;height:auto;image-rendering:pi
 </head>
 <body>
 <div class="card"${message ? '' : ' style="display:none"'}><div class="msg" id="msg">${escapeHtml(message || '')}</div></div>
-<div class="stage" id="stage"><div class="loading" id="loading">Animasyon yükleniyor… Görünmüyorsa dosyayı Chrome, Edge veya Safari ile aç.</div><canvas id="c"></canvas><div class="hint">Durdurmak / devam ettirmek için dokun</div></div>
+<div class="stage" id="stage"><div class="loading" id="loading">${escapeHtml(strings.loading)}</div><canvas id="c"></canvas><div class="hint">${escapeHtml(strings.hint)}</div></div>
 <script>${rendererSrc}</script>
 <script>
 (async function () {
@@ -324,7 +327,7 @@ canvas{display:block;margin:0 auto;max-width:100%;height:auto;image-rendering:pi
   player.play();
   document.getElementById('stage').addEventListener('click', () => player.toggle());
 })().catch(function (e) {
-  document.getElementById('loading').textContent = 'Bu sayfa açılamadı: ' + e.message + ' (güncel bir tarayıcı deneyin)';
+  document.getElementById('loading').textContent = P.strings.error.replace('{msg}', e.message);
 });
 </script>
 </body>

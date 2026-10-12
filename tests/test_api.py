@@ -121,3 +121,18 @@ def test_ttl_cleanup(app, client, video):
 def test_non_object_json_body_is_400(client):
     r = client.post('/api/jobs', json=['x'])
     assert r.status_code == 400 and r.is_json
+
+
+def test_errors_carry_codes_for_translation(client, video):
+    r = client.post('/api/uploads', data={'video': (io.BytesIO(b'x'), 'a.txt')}, content_type='multipart/form-data')
+    assert r.get_json()['code'] == 'bad_ext' and r.get_json()['params']['ext'] == 'txt'
+    up = upload(client, video).get_json()
+    r = client.post('/api/jobs', json={'upload_id': up['upload_id'], 'pixel_size': '1'})
+    body = r.get_json()
+    assert body['code'] == 'out_of_range' and body['params']['name'] == 'pixel_size' and body['params']['lo'] == 2
+    job = wait_job(client, client.post('/api/jobs', json={'upload_id': up['upload_id']}).get_json()['id'])
+    assert job['stage_code'] == 'done'
+    r = client.post('/api/jobs', json={'upload_id': up['upload_id'], 'start': 100})
+    failed = wait_job(client, r.get_json()['id'])
+    assert failed['state'] == 'error' and failed['error_code'] == 'start_after_duration'
+    assert client.get('/api/jobs/0123456789abcdef').get_json()['code'] == 'job_not_found'

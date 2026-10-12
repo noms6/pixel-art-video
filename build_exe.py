@@ -81,6 +81,7 @@ def main():
         f'--add-data={ROOT / "static" / "style.css"}{sep}static',
         f'--add-data={ROOT / "static" / "favicon.png"}{sep}static',
         f'--add-data={ROOT / "static" / "js"}{sep}static/js',
+        f'--add-data={ROOT / "static" / "i18n"}{sep}static/i18n',
         f'--paths={ROOT}',
         '--hidden-import=waitress',
         '--hidden-import=app',

@@ -18,6 +18,20 @@ from dataclasses import asdict
 from converter import ConversionCancelled, ConversionError, convert, probe
 
 
+# Aşama kodlarının Türkçe metinleri (API'de 'stage'; arayüz 'stage_code' ile kendi dilinde gösterir)
+STAGE_TEXT = {
+    'queued': 'Sırada bekliyor…',
+    'starting': 'Başlatılıyor…',
+    'reading': 'Frame okunuyor… {n}',
+    'palette': 'Palet hesaplanıyor…',
+    'mapping': 'Renkler eşleniyor… {i}/{n}',
+    'compressing': 'Sıkıştırılıyor…',
+    'done': 'Tamamlandı',
+    'cancelled': 'İptal edildi',
+    'error': 'Hata',
+}
+
+
 def new_id():
     return uuid.uuid4().hex[:16]
 
@@ -33,14 +47,29 @@ class Job:
         self.params = params
         self.state = 'queued'        # queued | running | done | error | cancelled
         self.progress = 0.0
-        self.stage = 'Sırada bekliyor…'
         self.error = None
+        self.error_code = None
+        self.error_params = {}
+        self.set_stage('queued')
         self.created = time.time()
         self.cancel_event = threading.Event()
 
+    def set_stage(self, code, **params):
+        self.stage_code, self.stage_params = code, params
+        self.stage = STAGE_TEXT.get(code, code).format(**params)
+
+    def fail(self, error):
+        self.state = 'error'
+        self.error = str(error)
+        self.error_code = getattr(error, 'code', 'unexpected')
+        self.error_params = getattr(error, 'params', {'msg': str(error)})
+        self.set_stage('error')
+
     def to_dict(self):
         return {'id': self.id, 'upload_id': self.upload_id, 'state': self.state,
-                'progress': round(self.progress, 3), 'stage': self.stage, 'error': self.error}
+                'progress': round(self.progress, 3), 'stage': self.stage,
+                'stage_code': self.stage_code, 'stage_params': self.stage_params,
+                'error': self.error, 'error_code': self.error_code, 'error_params': self.error_params}
 
 
 class JobManager:
@@ -88,7 +117,7 @@ class JobManager:
     def submit(self, upload_id, params):
         source = self.upload_path(upload_id)
         if not source:
-            raise ConversionError('Yüklenen video bulunamadı (süresi dolmuş olabilir), lütfen tekrar yükleyin')
+            raise ConversionError('upload_gone', 'Yüklenen video bulunamadı (süresi dolmuş olabilir), lütfen tekrar yükleyin')
         job = Job(new_id(), upload_id, params)
         with self.lock:
             self.jobs[job.id] = job
@@ -104,7 +133,8 @@ class JobManager:
         if job and job.state in ('queued', 'running'):
             job.cancel_event.set()
             if job.state == 'queued':
-                job.state, job.stage = 'cancelled', 'İptal edildi'
+                job.state = 'cancelled'
+                job.set_stage('cancelled')
         return job
 
     def job_dir(self, job_id):
@@ -113,25 +143,29 @@ class JobManager:
     def _run(self, job, source):
         if job.cancel_event.is_set():
             return
-        job.state, job.stage = 'running', 'Başlatılıyor…'
+        job.state = 'running'
+        job.set_stage('starting')
         out_dir = self.job_dir(job.id)
 
-        def on_progress(value, stage):
-            job.progress, job.stage = value, stage
+        def on_progress(value, code, **params):
+            job.progress = value
+            job.set_stage(code, **params)
 
         try:
             convert(source, out_dir, job.params, progress=on_progress, cancelled=job.cancel_event.is_set)
-            job.state, job.progress, job.stage = 'done', 1.0, 'Tamamlandı'
+            job.state, job.progress = 'done', 1.0
+            job.set_stage('done')
         except ConversionCancelled:
-            job.state, job.stage = 'cancelled', 'İptal edildi'
+            job.state = 'cancelled'
+            job.set_stage('cancelled')
             shutil.rmtree(out_dir, ignore_errors=True)
         except ConversionError as e:
-            job.state, job.error, job.stage = 'error', str(e), 'Hata'
+            job.fail(e)
             shutil.rmtree(out_dir, ignore_errors=True)
         except Exception as e:  # beklenmeyen hata: kullanıcıya kısa mesaj, konsola ayrıntı
             import traceback
             traceback.print_exc()
-            job.state, job.error, job.stage = 'error', f'Beklenmeyen hata: {e}', 'Hata'
+            job.fail(ConversionError('unexpected', f'Beklenmeyen hata: {e}', msg=str(e)))
             shutil.rmtree(out_dir, ignore_errors=True)
 
     # ---------- temizlik ----------

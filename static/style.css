@@ -266,3 +266,6 @@ canvas { display: block; max-width: 100%; height: auto; image-rendering: pixelat
     .row-buttons .btn { flex: 1 1 140px; }
     .player .time { min-width: 0; }
 }
+
+/* Ekran okuyucular için görünmez etiket */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

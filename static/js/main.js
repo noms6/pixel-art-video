@@ -2,6 +2,7 @@ import { createJob, getConfig, uploadVideo, waitForJob } from './api.js';
 import { PixelVideo, Player, Renderer } from './renderer.js';
 import { BACKGROUNDS, THEMES, modeOptions, styleFor } from './shapes.js';
 import { buildStandaloneHtml, downloadBlob, encodeGif, recordVideo, shareOrDownload, supportedVideoFormat } from './export.js';
+import { LANGUAGES, detectLanguage, errorText, isRtl, language, setLanguage, t } from './i18n.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -78,12 +79,12 @@ function isAbort(e) {
 // ------------------------------------------------------------------ tema & arka plan
 
 function applyTheme(id) {
-    const t = THEMES[id] || THEMES.romantic;
+    const theme = THEMES[id] || THEMES.romantic;
     const root = document.documentElement.style;
-    root.setProperty('--bg-start', t.start);
-    root.setProperty('--bg-end', t.end);
-    root.setProperty('--primary', t.primary);
-    root.setProperty('--secondary', t.secondary);
+    root.setProperty('--bg-start', theme.start);
+    root.setProperty('--bg-end', theme.end);
+    root.setProperty('--primary', theme.primary);
+    root.setProperty('--secondary', theme.secondary);
     storage.set('theme', id);
 }
 
@@ -109,6 +110,31 @@ function applyBackground(id) {
     document.body.prepend(box);
 }
 
+// Dile bağlı seçim kutularını (tema, arka plan, stil, palet) seçili değeri koruyarak doldur
+function fillLocalizedSelects() {
+    const keep = (id) => $(id).value || undefined;
+    fillSelect($('themeSelect'), Object.entries(THEMES).map(([k, th]) => [k, `${th.emoji} ${t(`theme.${k}`)}`]), keep('themeSelect'));
+    fillSelect($('bgSelect'), Object.entries(BACKGROUNDS).map(([k, b]) => [k, `${b.emoji} ${t(`bg.${k}`)}`]), keep('bgSelect'));
+    fillSelect($('modeSelect'), modeOptions(t), keep('modeSelect'));
+    if (state.config) fillSelect($('palette'), state.config.palettes.map((p) => [p.id, t(`palette.${p.id}`)]), keep('palette'));
+}
+
+async function changeLanguage(code) {
+    await setLanguage(code);
+    storage.set('lang', language());
+    fillLocalizedSelects();
+    if (state.config) {
+        updateConvUi();
+        $('formatHint').textContent = t('upload.formats', {
+            formats: state.config.extensions.map((e) => e.toUpperCase()).join(', '),
+            mb: state.config.max_upload_mb,
+        });
+    }
+    updateStyleUi();
+    if (state.meta) updateInfoLine();
+    for (const entry of [state.preview, state.result]) entry && entry.player.onFrame && entry.player.onFrame(entry.player.frameIndex);
+}
+
 // ------------------------------------------------------------------ dönüştürme ayarları
 
 const CONV_FIELDS = ['pixelSize', 'fps', 'palette', 'colors', 'dither', 'start', 'end', 'maxFrames', 'brightness', 'contrast', 'saturation'];
@@ -132,9 +158,9 @@ function readConvParams() {
 }
 
 function validateConvParams(p) {
-    if (p.end && p.end <= p.start) return 'Bitiş zamanı başlangıçtan büyük olmalı';
+    if (p.end && p.end <= p.start) return t('err.end_before_start');
     const dur = state.upload && state.upload.info.duration;
-    if (dur && p.start >= dur) return `Başlangıç, video süresinden (${dur.toFixed(1)} sn) küçük olmalı`;
+    if (dur && p.start >= dur) return t('err.start_after_duration', { start: p.start, duration: dur.toFixed(1) });
     return null;
 }
 
@@ -151,12 +177,16 @@ function updateConvUi() {
         swatches.append(s);
     }
     const p = readConvParams();
-    $('convSummary').textContent = `· ${p.pixel_size}px · ${p.fps || 'orijinal'} fps · ${$('palette').selectedOptions[0]?.text || ''}`;
+    $('convSummary').textContent = t('conv.summary', {
+        size: p.pixel_size,
+        fps: p.fps || t('conv.original'),
+        palette: $('palette').selectedOptions[0]?.text || '',
+    });
     storage.set('conv', Object.fromEntries(CONV_FIELDS.map((id) => [id, $(id).value])));
 }
 
 function setupConvSettings() {
-    fillSelect($('palette'), state.config.palettes.map((p) => [p.id, p.label]));
+    fillSelect($('palette'), state.config.palettes.map((p) => [p.id, t(`palette.${p.id}`)]));
     const saved = storage.get('conv', {});
     for (const id of CONV_FIELDS) {
         const value = saved[id] ?? CONV_DEFAULTS[id];
@@ -190,17 +220,17 @@ function stopEverything() {
 async function handleFile(file) {
     if (!file) return;
     if (!state.config) {
-        toast('Uygulama hâlâ hazırlanıyor, birkaç saniye sonra tekrar dene');
+        toast(t('toast.not_ready'));
         return;
     }
     const ext = (file.name.split('.').pop() || '').toLowerCase();
     const allowed = state.config.extensions;
     if (!allowed.includes(ext) && !(file.type || '').startsWith('video/')) {
-        toast(`Bu bir video dosyası değil gibi görünüyor (.${ext})`, 'error');
+        toast(t('toast.not_video', { ext }), 'error');
         return;
     }
     if (file.size > state.config.max_upload_mb * 1024 * 1024) {
-        toast(`Dosya çok büyük (en fazla ${state.config.max_upload_mb} MB)`, 'error');
+        toast(t('err.too_big', { mb: state.config.max_upload_mb }), 'error');
         return;
     }
     stopEverything();
@@ -217,14 +247,14 @@ async function handleFile(file) {
     const task = new AbortController();
     state.task = task;
     showStep('stepProcess');
-    setProgress(0, 'Video yükleniyor…');
+    setProgress(0, t('process.uploading', { p: 0 }));
     try {
-        state.upload = await uploadVideo(file, (p) => setProgress(p * 0.25, `Video yükleniyor… %${Math.round(p * 100)}`), task.signal);
+        state.upload = await uploadVideo(file, (p) => setProgress(p * 0.25, t('process.uploading', { p: Math.round(p * 100) })), task.signal);
     } catch (e) {
         if (state.task !== task) return;
         state.task = null;
         showStep('stepUpload');
-        if (!isAbort(e)) toast(e.message, 'error', 8000);
+        if (!isAbort(e)) toast(errorText(e), 'error', 8000);
         return;
     }
     if (state.task !== task) return;
@@ -246,13 +276,14 @@ async function convert(existingTask) {
     const task = existingTask || new AbortController();
     state.task = task;
     showStep('stepProcess');
-    setProgress(0.25, 'Dönüştürme başlatılıyor…');
+    setProgress(0.25, t('process.starting'));
     try {
         const job = await createJob(state.upload.upload_id, params);
         state.jobId = job.id;
-        const { meta, frames } = await waitForJob(job.id, (p, stage) => setProgress(0.25 + p * 0.7, stage), task.signal);
+        const onProgress = (p, code, params) => setProgress(0.25 + p * 0.7, code ? t(`stage.${code}`, params) : '');
+        const { meta, frames } = await waitForJob(job.id, onProgress, task.signal);
         if (state.task !== task) return;
-        setProgress(1, 'Hazır!');
+        setProgress(1, t('process.ready'));
         state.video = new PixelVideo(meta, frames);
         state.meta = meta;
         state.task = null;
@@ -260,11 +291,8 @@ async function convert(existingTask) {
     } catch (e) {
         if (state.task !== task) return;
         state.task = null;
-        if (isAbort(e)) {
-            toast('İşlem iptal edildi');
-        } else {
-            toast(e.message, 'error', 8000);
-        }
+        if (isAbort(e)) toast(t('toast.cancelled'));
+        else toast(errorText(e), 'error', 8000);
         if (state.video) showPreview();
         else showStep('stepUpload');
     }
@@ -283,18 +311,23 @@ function buildPlayerUi(container, player) {
     range.min = 0;
     range.max = v.frameCount - 1;
     range.value = 0;
-    range.setAttribute('aria-label', 'Konum');
+    range.dataset.i18nAria = 'player.position';
+    range.setAttribute('aria-label', t('player.position'));
     const time = document.createElement('span');
     time.className = 'time';
     const speed = document.createElement('select');
-    speed.setAttribute('aria-label', 'Hız');
+    speed.dataset.i18nAria = 'player.speed';
+    speed.setAttribute('aria-label', t('player.speed'));
     for (const s of [0.5, 1, 1.5, 2]) speed.append(new Option(`${s}×`, s));
     speed.value = '1';
     const total = (v.frameCount / v.fps).toFixed(1);
-    const sync = () => (btn.textContent = player.playing ? '⏸' : '▶');
+    const sync = () => {
+        btn.textContent = player.playing ? '⏸' : '▶';
+        btn.setAttribute('aria-label', t(player.playing ? 'player.pause' : 'player.play'));
+    };
     player.onFrame = (i) => {
         range.value = i;
-        time.textContent = `${(i / v.fps).toFixed(1)} / ${total} sn`;
+        time.textContent = t('player.time', { t: (i / v.fps).toFixed(1), total });
     };
     btn.addEventListener('click', () => {
         player.toggle();
@@ -325,6 +358,17 @@ function fitRenderer(entry, box) {
 
 // ------------------------------------------------------------------ önizleme
 
+function updateInfoLine() {
+    const m = state.meta;
+    const parts = [t('info.line', {
+        frames: m.frame_count, fps: m.fps, secs: (m.frame_count / m.fps).toFixed(1), w: m.width, h: m.height,
+        colors: m.palette.length, sw: m.source.width, sh: m.source.height,
+    })];
+    if (m.pixel_size !== m.params.pixel_size) parts.push(t('info.auto_pixel', { ps: m.pixel_size }));
+    if (m.truncated) parts.push(t('info.truncated', { frames: m.frame_count }));
+    $('infoLine').textContent = parts.join(' · ');
+}
+
 function showPreview() {
     if (!state.video) return showStep('stepUpload');
     state.result?.player.pause();
@@ -338,12 +382,7 @@ function showPreview() {
     fitRenderer(state.preview, $('pixelBox'));
     player.play();
     sync();
-    const m = state.meta;
-    const src = m.source;
-    $('infoLine').textContent = `${m.frame_count} frame · ${m.fps} fps · ${(m.frame_count / m.fps).toFixed(1)} sn · grid ${m.width}×${m.height}` +
-        ` · ${m.palette.length} renk · kaynak ${src.width}×${src.height}` +
-        (m.pixel_size !== m.params.pixel_size ? ` · pixel boyutu otomatik ${m.pixel_size} yapıldı (çözünürlük sınırı)` : '') +
-        (m.truncated ? ` · ⚠ video ${m.frame_count} frame sınırında kesildi (bitiş zamanı veya daha düşük fps seç)` : '');
+    updateInfoLine();
     const original = $('originalVideo');
     original.play().catch(() => {});
 }
@@ -405,8 +444,8 @@ function exportRenderer(maxWidth = Infinity) {
     renderer.setSize(w, h);
     const style = currentStyle();
     if (style.mode !== 'pixel') {
-        const t = THEMES[$('themeSelect').value];
-        style.background = { start: t.start, end: t.end };
+        const theme = THEMES[$('themeSelect').value];
+        style.background = { start: theme.start, end: theme.end };
     }
     renderer.setStyle(style);
     return renderer;
@@ -431,8 +470,8 @@ async function runExport(label, fn) {
     try {
         await fn(progress, task.signal);
     } catch (e) {
-        if (isAbort(e)) toast('Dışa aktarma iptal edildi');
-        else toast(`Dışa aktarma başarısız: ${e.message}`, 'error', 8000);
+        if (isAbort(e)) toast(t('toast.export_cancelled'));
+        else toast(t('toast.export_failed', { msg: errorText(e) }), 'error', 8000);
     } finally {
         state.exportTask = null;
         setExporting(false);
@@ -446,55 +485,57 @@ function download() {
     if (format === 'gif') {
         // GIF sıkıştırması zayıf: büyük boyut + uzun video yüzlerce MB eder
         const gifMax = 720;
-        if (Number($('exportSize').value) > gifMax) toast(`GIF için boyut ${gifMax} px ile sınırlandı`);
-        return runExport('GIF oluşturuluyor', async (progress, signal) => {
+        if (Number($('exportSize').value) > gifMax) toast(t('toast.gif_capped', { px: gifMax }));
+        return runExport(t('export.making_gif'), async (progress, signal) => {
             const renderer = exportRenderer(gifMax);
             const blob = await encodeGif({ renderer, frameCount: v.frameCount, fps: v.fps, onProgress: progress, signal });
             downloadBlob(blob, `${base}.gif`);
-            toast(`GIF hazır (${(blob.size / 1e6).toFixed(1)} MB)`, 'success');
+            toast(t('toast.gif_ready', { mb: (blob.size / 1e6).toFixed(1) }), 'success');
         });
     }
     const chosen = supportedVideoFormat(format);
     if (!chosen) {
-        toast('Bu tarayıcı video kaydını desteklemiyor; GIF deneyebilirsin', 'error');
+        toast(t('export.no_recorder'), 'error');
         return;
     }
-    if (chosen.format !== format) toast(`Tarayıcı ${format.toUpperCase()} kaydı desteklemiyor, ${chosen.format.toUpperCase()} olarak kaydediliyor`);
-    return runExport('Video kaydediliyor', async (progress, signal) => {
+    if (chosen.format !== format) toast(t('toast.format_fallback', { from: format.toUpperCase(), to: chosen.format.toUpperCase() }));
+    return runExport(t('export.recording'), async (progress, signal) => {
         const renderer = exportRenderer();
         const { blob, ext } = await recordVideo({ renderer, frameCount: v.frameCount, fps: v.fps, format, onProgress: progress, signal });
         downloadBlob(blob, `${base}.${ext}`);
-        toast(`Video hazır (${(blob.size / 1e6).toFixed(1)} MB)`, 'success');
+        toast(t('toast.video_ready', { mb: (blob.size / 1e6).toFixed(1) }), 'success');
     });
 }
 
 async function standaloneBlob() {
-    const t = THEMES[$('themeSelect').value];
     const html = await buildStandaloneHtml({
         video: state.video,
         style: currentStyle(),
-        theme: t,
+        theme: THEMES[$('themeSelect').value],
         message: $('messageText').value,
         typewriter: $('typewriter').checked,
-        title: $('pageTitle').value,
+        title: $('pageTitle').value || t('page.default_title'),
+        lang: language(),
+        rtl: isRtl(),
+        strings: { loading: t('page.loading'), hint: t('page.hint'), error: t('page.error') },
     });
     return new Blob([html], { type: 'text/html' });
 }
 
 function saveSite() {
-    return runExport('Sayfa hazırlanıyor', async () => {
+    return runExport(t('export.preparing_page'), async () => {
         const blob = await standaloneBlob();
         downloadBlob(blob, 'pixel_art_mesaj.html');
-        toast(`Sayfa kaydedildi (${(blob.size / 1024).toFixed(0)} KB) — bu dosyayı gönderebilirsin`, 'success');
+        toast(t('toast.page_saved', { kb: (blob.size / 1024).toFixed(0) }), 'success');
     });
 }
 
 function share() {
-    return runExport('Paylaşım hazırlanıyor', async () => {
+    return runExport(t('export.preparing_share'), async () => {
         const blob = await standaloneBlob();
         const result = await shareOrDownload(blob, 'pixel_art_mesaj.html', $('messageText').value);
         if (result === 'downloaded') {
-            toast('Paylaşım bu tarayıcıda desteklenmiyor; dosya indirildi, WhatsApp veya e-posta ile gönderebilirsin', 'info', 8000);
+            toast(t('toast.share_fallback'), 'info', 8000);
         }
     });
 }
@@ -538,15 +579,18 @@ function goToUpload() {
 }
 
 async function init() {
-    fillSelect($('themeSelect'), Object.entries(THEMES).map(([k, t]) => [k, t.label]), storage.get('theme', 'romantic'));
+    await setLanguage(detectLanguage(storage.get('lang', null)));
+    fillSelect($('langSelect'), LANGUAGES, language());
+    $('langSelect').addEventListener('change', (e) => changeLanguage(e.target.value));
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    fillSelect($('bgSelect'), Object.entries(BACKGROUNDS).map(([k, b]) => [k, b.label]), storage.get('bg', reduced ? 'none' : 'hearts'));
+    fillLocalizedSelects();
+    fillSelect($('themeSelect'), Object.entries(THEMES).map(([k, th]) => [k, `${th.emoji} ${t(`theme.${k}`)}`]), storage.get('theme', 'romantic'));
+    fillSelect($('bgSelect'), Object.entries(BACKGROUNDS).map(([k, b]) => [k, `${b.emoji} ${t(`bg.${k}`)}`]), storage.get('bg', reduced ? 'none' : 'hearts'));
     applyTheme($('themeSelect').value);
     applyBackground($('bgSelect').value);
     $('themeSelect').addEventListener('change', (e) => applyTheme(e.target.value));
     $('bgSelect').addEventListener('change', (e) => applyBackground(e.target.value));
 
-    fillSelect($('modeSelect'), modeOptions());
     const style = storage.get('style', {});
     for (const id of STYLE_FIELDS) {
         if (style[id] !== undefined && (id !== 'modeSelect' || [...$(id).options].some((o) => o.value === style[id]))) $(id).value = style[id];
@@ -559,10 +603,13 @@ async function init() {
     try {
         state.config = await getConfig();
     } catch (e) {
-        toast(`Sunucuya bağlanılamadı: ${e.message}`, 'error', 15000);
+        toast(t('toast.server_unreachable', { msg: errorText(e) }), 'error', 15000);
         return;
     }
-    $('formatHint').textContent = `${state.config.extensions.map((e) => e.toUpperCase()).join(', ')} · en fazla ${state.config.max_upload_mb} MB`;
+    $('formatHint').textContent = t('upload.formats', {
+        formats: state.config.extensions.map((e) => e.toUpperCase()).join(', '),
+        mb: state.config.max_upload_mb,
+    });
     setupConvSettings();
 
     // İptal sinyali hem yüklemeyi hem sunucudaki dönüştürme işini durdurur (bkz. api.waitForJob)
