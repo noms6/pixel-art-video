@@ -10,7 +10,7 @@
 
 🌐 [English](../../README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Português](README.pt.md) · [Nederlands](README.nl.md) · [Polski](README.pl.md) · [Română](README.ro.md) · [Svenska](README.sv.md) · [Ελληνικά](README.el.md) · [Русский](README.ru.md) · [Українська](README.uk.md) · [Azərbaycanca](README.az.md) · [العربية](README.ar.md) · **فارسی** · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [中文](README.zh.md) · [Bahasa Indonesia](README.id.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md)
 
-<img src="../images/demo-hearts.gif" width="420" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="420" alt="ASCII demo">
+<img src="../images/demo-hearts.gif" width="400" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="400" alt="ASCII demo">
 
 </div>
 
@@ -36,17 +36,17 @@
 
 ## 🖼️ تصاویر صفحه
 
-| | |
-|---|---|
-| <img src="../images/upload.png" alt=""><br>بارگذاری ویدیو | <img src="../images/preview.png" alt=""><br>اصلی و پیکسل‌آرت کنار هم |
-| <img src="../images/result.png" alt=""><br>یک سبک انتخاب کن و پیامت را بنویس | <img src="../images/mobile-rtl.png" width="260" alt=""><br>موبایل، زبان‌های راست به چپ |
+<table>
+<tr><td align="center"><img src="../images/upload.png" alt=""><br>بارگذاری ویدیو</td><td align="center"><img src="../images/preview.png" alt=""><br>اصلی و پیکسل‌آرت کنار هم</td></tr>
+<tr><td align="center"><img src="../images/result.png" alt=""><br>یک سبک انتخاب کن و پیامت را بنویس</td><td align="center"><img src="../images/mobile-rtl.png" width="260" alt=""><br>موبایل، زبان‌های راست به چپ</td></tr>
+</table>
 
 ## 🎨 سبک‌ها
 
-| | | |
-|---|---|---|
-| <img src="../images/style-pixel.png" alt=""><br>پیکسل‌آرت | <img src="../images/style-rose.png" alt=""><br>رزها | <img src="../images/style-heart.png" alt=""><br>قلب‌ها |
-| <img src="../images/style-ascii.png" alt=""><br>ASCII | <img src="../images/style-braille.png" alt=""><br>بریل | <img src="../images/style-led.png" alt=""><br>صفحه LED |
+<table>
+<tr><td align="center"><img src="../images/style-pixel.png" alt=""><br>پیکسل‌آرت</td><td align="center"><img src="../images/style-rose.png" alt=""><br>رزها</td><td align="center"><img src="../images/style-heart.png" alt=""><br>قلب‌ها</td></tr>
+<tr><td align="center"><img src="../images/style-ascii.png" alt=""><br>ASCII</td><td align="center"><img src="../images/style-braille.png" alt=""><br>بریل</td><td align="center"><img src="../images/style-led.png" alt=""><br>صفحه LED</td></tr>
+</table>
 
 ## 🧭 نحوه استفاده
 

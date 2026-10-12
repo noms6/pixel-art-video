@@ -10,7 +10,7 @@
 
 🌐 [English](../../README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Português](README.pt.md) · [Nederlands](README.nl.md) · [Polski](README.pl.md) · [Română](README.ro.md) · [Svenska](README.sv.md) · [Ελληνικά](README.el.md) · [Русский](README.ru.md) · [Українська](README.uk.md) · [Azərbaycanca](README.az.md) · [العربية](README.ar.md) · [فارسی](README.fa.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · **中文** · [Bahasa Indonesia](README.id.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md)
 
-<img src="../images/demo-hearts.gif" width="420" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="420" alt="ASCII demo">
+<img src="../images/demo-hearts.gif" width="400" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="400" alt="ASCII demo">
 
 </div>
 
@@ -34,17 +34,17 @@
 
 ## 🖼️ 截图
 
-| | |
-|---|---|
-| <img src="../images/upload.png" alt=""><br>上传视频 | <img src="../images/preview.png" alt=""><br>原视频与像素画对比 |
-| <img src="../images/result.png" alt=""><br>选择风格并写下留言 | <img src="../images/mobile-rtl.png" width="260" alt=""><br>手机端，从右到左的语言 |
+<table>
+<tr><td align="center"><img src="../images/upload.png" alt=""><br>上传视频</td><td align="center"><img src="../images/preview.png" alt=""><br>原视频与像素画对比</td></tr>
+<tr><td align="center"><img src="../images/result.png" alt=""><br>选择风格并写下留言</td><td align="center"><img src="../images/mobile-rtl.png" width="260" alt=""><br>手机端，从右到左的语言</td></tr>
+</table>
 
 ## 🎨 风格
 
-| | | |
-|---|---|---|
-| <img src="../images/style-pixel.png" alt=""><br>像素画 | <img src="../images/style-rose.png" alt=""><br>玫瑰 | <img src="../images/style-heart.png" alt=""><br>爱心 |
-| <img src="../images/style-ascii.png" alt=""><br>ASCII | <img src="../images/style-braille.png" alt=""><br>盲文点阵 | <img src="../images/style-led.png" alt=""><br>LED 屏幕 |
+<table>
+<tr><td align="center"><img src="../images/style-pixel.png" alt=""><br>像素画</td><td align="center"><img src="../images/style-rose.png" alt=""><br>玫瑰</td><td align="center"><img src="../images/style-heart.png" alt=""><br>爱心</td></tr>
+<tr><td align="center"><img src="../images/style-ascii.png" alt=""><br>ASCII</td><td align="center"><img src="../images/style-braille.png" alt=""><br>盲文点阵</td><td align="center"><img src="../images/style-led.png" alt=""><br>LED 屏幕</td></tr>
+</table>
 
 ## 🧭 使用方法
 

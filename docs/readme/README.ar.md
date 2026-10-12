@@ -10,7 +10,7 @@
 
 🌐 [English](../../README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Português](README.pt.md) · [Nederlands](README.nl.md) · [Polski](README.pl.md) · [Română](README.ro.md) · [Svenska](README.sv.md) · [Ελληνικά](README.el.md) · [Русский](README.ru.md) · [Українська](README.uk.md) · [Azərbaycanca](README.az.md) · **العربية** · [فارسی](README.fa.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [中文](README.zh.md) · [Bahasa Indonesia](README.id.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md)
 
-<img src="../images/demo-hearts.gif" width="420" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="420" alt="ASCII demo">
+<img src="../images/demo-hearts.gif" width="400" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="400" alt="ASCII demo">
 
 </div>
 
@@ -36,17 +36,17 @@
 
 ## 🖼️ لقطات الشاشة
 
-| | |
-|---|---|
-| <img src="../images/upload.png" alt=""><br>رفع فيديو | <img src="../images/preview.png" alt=""><br>الأصلي وفن البكسل جنبًا إلى جنب |
-| <img src="../images/result.png" alt=""><br>اختر نمطًا واكتب رسالتك | <img src="../images/mobile-rtl.png" width="260" alt=""><br>الهاتف، اللغات من اليمين إلى اليسار |
+<table>
+<tr><td align="center"><img src="../images/upload.png" alt=""><br>رفع فيديو</td><td align="center"><img src="../images/preview.png" alt=""><br>الأصلي وفن البكسل جنبًا إلى جنب</td></tr>
+<tr><td align="center"><img src="../images/result.png" alt=""><br>اختر نمطًا واكتب رسالتك</td><td align="center"><img src="../images/mobile-rtl.png" width="260" alt=""><br>الهاتف، اللغات من اليمين إلى اليسار</td></tr>
+</table>
 
 ## 🎨 الأنماط
 
-| | | |
-|---|---|---|
-| <img src="../images/style-pixel.png" alt=""><br>فن البكسل | <img src="../images/style-rose.png" alt=""><br>ورود | <img src="../images/style-heart.png" alt=""><br>قلوب |
-| <img src="../images/style-ascii.png" alt=""><br>ASCII | <img src="../images/style-braille.png" alt=""><br>برايل | <img src="../images/style-led.png" alt=""><br>شاشة LED |
+<table>
+<tr><td align="center"><img src="../images/style-pixel.png" alt=""><br>فن البكسل</td><td align="center"><img src="../images/style-rose.png" alt=""><br>ورود</td><td align="center"><img src="../images/style-heart.png" alt=""><br>قلوب</td></tr>
+<tr><td align="center"><img src="../images/style-ascii.png" alt=""><br>ASCII</td><td align="center"><img src="../images/style-braille.png" alt=""><br>برايل</td><td align="center"><img src="../images/style-led.png" alt=""><br>شاشة LED</td></tr>
+</table>
 
 ## 🧭 طريقة الاستخدام
 

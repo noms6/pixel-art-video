@@ -1048,8 +1048,8 @@ def render(code):
         '',
         f'🌐 {bar}',
         '',
-        f'<img src="{img}demo-hearts.gif" width="420" alt="Pixel Art Video demo"> '
-        f'<img src="{img}demo-ascii.gif" width="420" alt="ASCII demo">',
+        f'<img src="{img}demo-hearts.gif" width="400" alt="Pixel Art Video demo"> '
+        f'<img src="{img}demo-ascii.gif" width="400" alt="ASCII demo">',
         '',
         '</div>',
         '',
@@ -1068,17 +1068,19 @@ def render(code):
         '',
         f'## 🖼️ {t["screens"]}',
         '',
-        '| | |',
-        '|---|---|',
-        f'| <img src="{img}upload.png" alt=""><br>{t["cap_upload"]} | <img src="{img}preview.png" alt=""><br>{t["cap_preview"]} |',
-        f'| <img src="{img}result.png" alt=""><br>{t["cap_result"]} | <img src="{img}mobile-rtl.png" width="260" alt=""><br>{t["cap_mobile"]} |',
+        '<table>',
+        f'<tr><td align="center"><img src="{img}upload.png" alt=""><br>{t["cap_upload"]}</td>'
+        f'<td align="center"><img src="{img}preview.png" alt=""><br>{t["cap_preview"]}</td></tr>',
+        f'<tr><td align="center"><img src="{img}result.png" alt=""><br>{t["cap_result"]}</td>'
+        f'<td align="center"><img src="{img}mobile-rtl.png" width="260" alt=""><br>{t["cap_mobile"]}</td></tr>',
+        '</table>',
         '',
         f'## 🎨 {t["styles"]}',
         '',
-        '| | | |',
-        '|---|---|---|',
-        f'| <img src="{img}style-pixel.png" alt=""><br>{t["s_pixel"]} | <img src="{img}style-rose.png" alt=""><br>{t["s_rose"]} | <img src="{img}style-heart.png" alt=""><br>{t["s_heart"]} |',
-        f'| <img src="{img}style-ascii.png" alt=""><br>{t["s_ascii"]} | <img src="{img}style-braille.png" alt=""><br>{t["s_braille"]} | <img src="{img}style-led.png" alt=""><br>{t["s_led"]} |',
+        '<table>',
+        *[('<tr>' + ''.join(f'<td align="center"><img src="{img}style-{n}.png" alt=""><br>{t["s_" + n]}</td>' for n in row) + '</tr>')
+          for row in (('pixel', 'rose', 'heart'), ('ascii', 'braille', 'led'))],
+        '</table>',
         '',
         f'## 🧭 {t["usage"]}',
         '',

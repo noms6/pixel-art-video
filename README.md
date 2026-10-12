@@ -10,7 +10,7 @@
 
 🌐 **English** · [Türkçe](docs/readme/README.tr.md) · [Deutsch](docs/readme/README.de.md) · [Français](docs/readme/README.fr.md) · [Español](docs/readme/README.es.md) · [Italiano](docs/readme/README.it.md) · [Português](docs/readme/README.pt.md) · [Nederlands](docs/readme/README.nl.md) · [Polski](docs/readme/README.pl.md) · [Română](docs/readme/README.ro.md) · [Svenska](docs/readme/README.sv.md) · [Ελληνικά](docs/readme/README.el.md) · [Русский](docs/readme/README.ru.md) · [Українська](docs/readme/README.uk.md) · [Azərbaycanca](docs/readme/README.az.md) · [العربية](docs/readme/README.ar.md) · [فارسی](docs/readme/README.fa.md) · [हिन्दी](docs/readme/README.hi.md) · [日本語](docs/readme/README.ja.md) · [한국어](docs/readme/README.ko.md) · [中文](docs/readme/README.zh.md) · [Bahasa Indonesia](docs/readme/README.id.md) · [Tiếng Việt](docs/readme/README.vi.md) · [ไทย](docs/readme/README.th.md)
 
-<img src="docs/images/demo-hearts.gif" width="420" alt="Pixel Art Video demo"> <img src="docs/images/demo-ascii.gif" width="420" alt="ASCII demo">
+<img src="docs/images/demo-hearts.gif" width="400" alt="Pixel Art Video demo"> <img src="docs/images/demo-ascii.gif" width="400" alt="ASCII demo">
 
 </div>
 
@@ -34,17 +34,17 @@
 
 ## 🖼️ Screenshots
 
-| | |
-|---|---|
-| <img src="docs/images/upload.png" alt=""><br>Upload a video | <img src="docs/images/preview.png" alt=""><br>Original and pixel art side by side |
-| <img src="docs/images/result.png" alt=""><br>Pick a style and write your message | <img src="docs/images/mobile-rtl.png" width="260" alt=""><br>Mobile, right-to-left languages |
+<table>
+<tr><td align="center"><img src="docs/images/upload.png" alt=""><br>Upload a video</td><td align="center"><img src="docs/images/preview.png" alt=""><br>Original and pixel art side by side</td></tr>
+<tr><td align="center"><img src="docs/images/result.png" alt=""><br>Pick a style and write your message</td><td align="center"><img src="docs/images/mobile-rtl.png" width="260" alt=""><br>Mobile, right-to-left languages</td></tr>
+</table>
 
 ## 🎨 Styles
 
-| | | |
-|---|---|---|
-| <img src="docs/images/style-pixel.png" alt=""><br>Pixel art | <img src="docs/images/style-rose.png" alt=""><br>Roses | <img src="docs/images/style-heart.png" alt=""><br>Hearts |
-| <img src="docs/images/style-ascii.png" alt=""><br>ASCII | <img src="docs/images/style-braille.png" alt=""><br>Braille | <img src="docs/images/style-led.png" alt=""><br>LED screen |
+<table>
+<tr><td align="center"><img src="docs/images/style-pixel.png" alt=""><br>Pixel art</td><td align="center"><img src="docs/images/style-rose.png" alt=""><br>Roses</td><td align="center"><img src="docs/images/style-heart.png" alt=""><br>Hearts</td></tr>
+<tr><td align="center"><img src="docs/images/style-ascii.png" alt=""><br>ASCII</td><td align="center"><img src="docs/images/style-braille.png" alt=""><br>Braille</td><td align="center"><img src="docs/images/style-led.png" alt=""><br>LED screen</td></tr>
+</table>
 
 ## 🧭 How to use
 

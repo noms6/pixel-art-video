@@ -10,7 +10,7 @@
 
 🌐 [English](../../README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Português](README.pt.md) · [Nederlands](README.nl.md) · [Polski](README.pl.md) · **Română** · [Svenska](README.sv.md) · [Ελληνικά](README.el.md) · [Русский](README.ru.md) · [Українська](README.uk.md) · [Azərbaycanca](README.az.md) · [العربية](README.ar.md) · [فارسی](README.fa.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [中文](README.zh.md) · [Bahasa Indonesia](README.id.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md)
 
-<img src="../images/demo-hearts.gif" width="420" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="420" alt="ASCII demo">
+<img src="../images/demo-hearts.gif" width="400" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="400" alt="ASCII demo">
 
 </div>
 
@@ -34,17 +34,17 @@
 
 ## 🖼️ Capturi de ecran
 
-| | |
-|---|---|
-| <img src="../images/upload.png" alt=""><br>Încarcă un videoclip | <img src="../images/preview.png" alt=""><br>Original și pixel art unul lângă altul |
-| <img src="../images/result.png" alt=""><br>Alege un stil și scrie-ți mesajul | <img src="../images/mobile-rtl.png" width="260" alt=""><br>Mobil, limbi de la dreapta la stânga |
+<table>
+<tr><td align="center"><img src="../images/upload.png" alt=""><br>Încarcă un videoclip</td><td align="center"><img src="../images/preview.png" alt=""><br>Original și pixel art unul lângă altul</td></tr>
+<tr><td align="center"><img src="../images/result.png" alt=""><br>Alege un stil și scrie-ți mesajul</td><td align="center"><img src="../images/mobile-rtl.png" width="260" alt=""><br>Mobil, limbi de la dreapta la stânga</td></tr>
+</table>
 
 ## 🎨 Stiluri
 
-| | | |
-|---|---|---|
-| <img src="../images/style-pixel.png" alt=""><br>Pixel art | <img src="../images/style-rose.png" alt=""><br>Trandafiri | <img src="../images/style-heart.png" alt=""><br>Inimi |
-| <img src="../images/style-ascii.png" alt=""><br>ASCII | <img src="../images/style-braille.png" alt=""><br>Braille | <img src="../images/style-led.png" alt=""><br>Ecran LED |
+<table>
+<tr><td align="center"><img src="../images/style-pixel.png" alt=""><br>Pixel art</td><td align="center"><img src="../images/style-rose.png" alt=""><br>Trandafiri</td><td align="center"><img src="../images/style-heart.png" alt=""><br>Inimi</td></tr>
+<tr><td align="center"><img src="../images/style-ascii.png" alt=""><br>ASCII</td><td align="center"><img src="../images/style-braille.png" alt=""><br>Braille</td><td align="center"><img src="../images/style-led.png" alt=""><br>Ecran LED</td></tr>
+</table>
 
 ## 🧭 Utilizare
 

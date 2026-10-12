@@ -10,7 +10,7 @@
 
 🌐 [English](../../README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Português](README.pt.md) · [Nederlands](README.nl.md) · [Polski](README.pl.md) · [Română](README.ro.md) · **Svenska** · [Ελληνικά](README.el.md) · [Русский](README.ru.md) · [Українська](README.uk.md) · [Azərbaycanca](README.az.md) · [العربية](README.ar.md) · [فارسی](README.fa.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [中文](README.zh.md) · [Bahasa Indonesia](README.id.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md)
 
-<img src="../images/demo-hearts.gif" width="420" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="420" alt="ASCII demo">
+<img src="../images/demo-hearts.gif" width="400" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="400" alt="ASCII demo">
 
 </div>
 
@@ -34,17 +34,17 @@
 
 ## 🖼️ Skärmbilder
 
-| | |
-|---|---|
-| <img src="../images/upload.png" alt=""><br>Ladda upp en video | <img src="../images/preview.png" alt=""><br>Original och pixelkonst sida vid sida |
-| <img src="../images/result.png" alt=""><br>Välj en stil och skriv ditt meddelande | <img src="../images/mobile-rtl.png" width="260" alt=""><br>Mobil, språk som skrivs från höger till vänster |
+<table>
+<tr><td align="center"><img src="../images/upload.png" alt=""><br>Ladda upp en video</td><td align="center"><img src="../images/preview.png" alt=""><br>Original och pixelkonst sida vid sida</td></tr>
+<tr><td align="center"><img src="../images/result.png" alt=""><br>Välj en stil och skriv ditt meddelande</td><td align="center"><img src="../images/mobile-rtl.png" width="260" alt=""><br>Mobil, språk som skrivs från höger till vänster</td></tr>
+</table>
 
 ## 🎨 Stilar
 
-| | | |
-|---|---|---|
-| <img src="../images/style-pixel.png" alt=""><br>Pixelkonst | <img src="../images/style-rose.png" alt=""><br>Rosor | <img src="../images/style-heart.png" alt=""><br>Hjärtan |
-| <img src="../images/style-ascii.png" alt=""><br>ASCII | <img src="../images/style-braille.png" alt=""><br>Punktskrift | <img src="../images/style-led.png" alt=""><br>LED-skärm |
+<table>
+<tr><td align="center"><img src="../images/style-pixel.png" alt=""><br>Pixelkonst</td><td align="center"><img src="../images/style-rose.png" alt=""><br>Rosor</td><td align="center"><img src="../images/style-heart.png" alt=""><br>Hjärtan</td></tr>
+<tr><td align="center"><img src="../images/style-ascii.png" alt=""><br>ASCII</td><td align="center"><img src="../images/style-braille.png" alt=""><br>Punktskrift</td><td align="center"><img src="../images/style-led.png" alt=""><br>LED-skärm</td></tr>
+</table>
 
 ## 🧭 Så använder du den
 

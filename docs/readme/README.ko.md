@@ -10,7 +10,7 @@
 
 🌐 [English](../../README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Português](README.pt.md) · [Nederlands](README.nl.md) · [Polski](README.pl.md) · [Română](README.ro.md) · [Svenska](README.sv.md) · [Ελληνικά](README.el.md) · [Русский](README.ru.md) · [Українська](README.uk.md) · [Azərbaycanca](README.az.md) · [العربية](README.ar.md) · [فارسی](README.fa.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · **한국어** · [中文](README.zh.md) · [Bahasa Indonesia](README.id.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md)
 
-<img src="../images/demo-hearts.gif" width="420" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="420" alt="ASCII demo">
+<img src="../images/demo-hearts.gif" width="400" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="400" alt="ASCII demo">
 
 </div>
 
@@ -34,17 +34,17 @@
 
 ## 🖼️ 스크린샷
 
-| | |
-|---|---|
-| <img src="../images/upload.png" alt=""><br>영상 업로드 | <img src="../images/preview.png" alt=""><br>원본과 픽셀 아트를 나란히 |
-| <img src="../images/result.png" alt=""><br>스타일을 고르고 메시지 작성 | <img src="../images/mobile-rtl.png" width="260" alt=""><br>모바일, 오른쪽에서 왼쪽으로 쓰는 언어 |
+<table>
+<tr><td align="center"><img src="../images/upload.png" alt=""><br>영상 업로드</td><td align="center"><img src="../images/preview.png" alt=""><br>원본과 픽셀 아트를 나란히</td></tr>
+<tr><td align="center"><img src="../images/result.png" alt=""><br>스타일을 고르고 메시지 작성</td><td align="center"><img src="../images/mobile-rtl.png" width="260" alt=""><br>모바일, 오른쪽에서 왼쪽으로 쓰는 언어</td></tr>
+</table>
 
 ## 🎨 스타일
 
-| | | |
-|---|---|---|
-| <img src="../images/style-pixel.png" alt=""><br>픽셀 아트 | <img src="../images/style-rose.png" alt=""><br>장미 | <img src="../images/style-heart.png" alt=""><br>하트 |
-| <img src="../images/style-ascii.png" alt=""><br>ASCII | <img src="../images/style-braille.png" alt=""><br>점자 | <img src="../images/style-led.png" alt=""><br>LED 화면 |
+<table>
+<tr><td align="center"><img src="../images/style-pixel.png" alt=""><br>픽셀 아트</td><td align="center"><img src="../images/style-rose.png" alt=""><br>장미</td><td align="center"><img src="../images/style-heart.png" alt=""><br>하트</td></tr>
+<tr><td align="center"><img src="../images/style-ascii.png" alt=""><br>ASCII</td><td align="center"><img src="../images/style-braille.png" alt=""><br>점자</td><td align="center"><img src="../images/style-led.png" alt=""><br>LED 화면</td></tr>
+</table>
 
 ## 🧭 사용 방법
 

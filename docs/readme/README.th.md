@@ -10,7 +10,7 @@
 
 🌐 [English](../../README.md) · [Türkçe](README.tr.md) · [Deutsch](README.de.md) · [Français](README.fr.md) · [Español](README.es.md) · [Italiano](README.it.md) · [Português](README.pt.md) · [Nederlands](README.nl.md) · [Polski](README.pl.md) · [Română](README.ro.md) · [Svenska](README.sv.md) · [Ελληνικά](README.el.md) · [Русский](README.ru.md) · [Українська](README.uk.md) · [Azərbaycanca](README.az.md) · [العربية](README.ar.md) · [فارسی](README.fa.md) · [हिन्दी](README.hi.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [中文](README.zh.md) · [Bahasa Indonesia](README.id.md) · [Tiếng Việt](README.vi.md) · **ไทย**
 
-<img src="../images/demo-hearts.gif" width="420" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="420" alt="ASCII demo">
+<img src="../images/demo-hearts.gif" width="400" alt="Pixel Art Video demo"> <img src="../images/demo-ascii.gif" width="400" alt="ASCII demo">
 
 </div>
 
@@ -34,17 +34,17 @@
 
 ## 🖼️ ภาพหน้าจอ
 
-| | |
-|---|---|
-| <img src="../images/upload.png" alt=""><br>อัปโหลดวิดีโอ | <img src="../images/preview.png" alt=""><br>ต้นฉบับและพิกเซลอาร์ตเทียบกัน |
-| <img src="../images/result.png" alt=""><br>เลือกสไตล์และเขียนข้อความ | <img src="../images/mobile-rtl.png" width="260" alt=""><br>มือถือ ภาษาที่เขียนจากขวาไปซ้าย |
+<table>
+<tr><td align="center"><img src="../images/upload.png" alt=""><br>อัปโหลดวิดีโอ</td><td align="center"><img src="../images/preview.png" alt=""><br>ต้นฉบับและพิกเซลอาร์ตเทียบกัน</td></tr>
+<tr><td align="center"><img src="../images/result.png" alt=""><br>เลือกสไตล์และเขียนข้อความ</td><td align="center"><img src="../images/mobile-rtl.png" width="260" alt=""><br>มือถือ ภาษาที่เขียนจากขวาไปซ้าย</td></tr>
+</table>
 
 ## 🎨 สไตล์
 
-| | | |
-|---|---|---|
-| <img src="../images/style-pixel.png" alt=""><br>พิกเซลอาร์ต | <img src="../images/style-rose.png" alt=""><br>กุหลาบ | <img src="../images/style-heart.png" alt=""><br>หัวใจ |
-| <img src="../images/style-ascii.png" alt=""><br>ASCII | <img src="../images/style-braille.png" alt=""><br>อักษรเบรลล์ | <img src="../images/style-led.png" alt=""><br>จอ LED |
+<table>
+<tr><td align="center"><img src="../images/style-pixel.png" alt=""><br>พิกเซลอาร์ต</td><td align="center"><img src="../images/style-rose.png" alt=""><br>กุหลาบ</td><td align="center"><img src="../images/style-heart.png" alt=""><br>หัวใจ</td></tr>
+<tr><td align="center"><img src="../images/style-ascii.png" alt=""><br>ASCII</td><td align="center"><img src="../images/style-braille.png" alt=""><br>อักษรเบรลล์</td><td align="center"><img src="../images/style-led.png" alt=""><br>จอ LED</td></tr>
+</table>
 
 ## 🧭 วิธีใช้
 
