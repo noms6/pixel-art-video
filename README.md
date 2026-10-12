@@ -130,11 +130,15 @@ WhatsApp/Dosyalar önizlemesi) yalnızca mesajı gösterir; animasyon için dosy
 
 Proje analizi, test raporları ve yol haritası: [docs/ANALIZ_VE_PLAN.md](docs/ANALIZ_VE_PLAN.md)
 
-Yeni sürüm yayınlamak: `git tag v1.0.0 && git push --tags` — GitHub Actions testleri çalıştırır, exe'yi derler ve
-Release'e ekler.
+Yeni sürüm yayınlamak: GitHub'da bir Release yayınla (ör. `gh release create v1.1.0 --generate-notes`) — GitHub
+Actions testleri çalıştırır, exe'yi derler ve `PixelArtVideo-Windows-x64.zip` olarak sürüme ekler.
 
 ## 📄 Üçüncü taraf yazılımlar
 
 Exe şu açık kaynak bileşenleri içerir: [OpenCV](https://opencv.org) (Apache 2.0) ve onunla gelen
 [FFmpeg](https://ffmpeg.org) (LGPL 2.1), [NumPy](https://numpy.org) (BSD), [Flask](https://flask.palletsprojects.com)
 ve Werkzeug/Jinja2 (BSD), [Waitress](https://github.com/Pylons/waitress) (ZPL 2.1), Python (PSF).
+
+## 📜 Lisans
+
+[MIT](LICENSE) © noms6

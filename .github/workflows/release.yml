@@ -1,9 +1,15 @@
 name: Release
 
-# v1.0.0 gibi bir etiket push'lanınca Windows exe'si derlenir ve GitHub Release'e eklenir.
+# GitHub'da bir sürüm (Release) yayınlanınca Windows exe'si derlenir ve sürüme eklenir.
+# Elle çalıştırmak için: Actions → Release → Run workflow (sürüm etiketini gir).
 on:
-  push:
-    tags: ['v*']
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Sürüm etiketi (ör. v1.0.0)'
+        required: true
 
 permissions:
   contents: write
@@ -11,11 +17,18 @@ permissions:
 jobs:
   windows:
     runs-on: windows-latest
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - name: Paketleri kur
         run: pip install -r requirements-dev.txt
       - name: Testler
@@ -25,7 +38,7 @@ jobs:
       - name: Zip
         shell: pwsh
         run: Compress-Archive -Path dist/VideoASCIIArtConverter -DestinationPath PixelArtVideo-Windows-x64.zip
-      - uses: softprops/action-gh-release@v2
-        with:
-          files: PixelArtVideo-Windows-x64.zip
-          generate_release_notes: true
+      - name: Sürüme ekle
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ env.TAG }}" PixelArtVideo-Windows-x64.zip --clobber
