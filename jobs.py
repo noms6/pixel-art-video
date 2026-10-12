@@ -139,8 +139,10 @@ class JobManager:
         """TTL'den eski yükleme ve iş klasörlerini sil. Silinen klasör sayısını döndürür."""
         now = now or time.time()
         removed = 0
-        active = {j.id for j in self.jobs.values() if j.state in ('queued', 'running')}
-        active_uploads = {j.upload_id for j in self.jobs.values() if j.state in ('queued', 'running')}
+        with self.lock:
+            running = [j for j in self.jobs.values() if j.state in ('queued', 'running')]
+        active = {j.id for j in running}
+        active_uploads = {j.upload_id for j in running}
         for base, keep in ((self.jobs_dir, active), (self.uploads_dir, active_uploads)):
             for name in os.listdir(base):
                 path = os.path.join(base, name)

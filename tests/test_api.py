@@ -116,3 +116,8 @@ def test_ttl_cleanup(app, client, video):
     assert mgr.cleanup(now=time.time() + 10) == 0
     assert mgr.cleanup(now=time.time() + mgr.ttl + 10) == 2
     assert client.get(f"/api/jobs/{job['id']}").status_code == 404
+
+
+def test_non_object_json_body_is_400(client):
+    r = client.post('/api/jobs', json=['x'])
+    assert r.status_code == 400 and r.is_json

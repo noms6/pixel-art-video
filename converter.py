@@ -252,6 +252,7 @@ class ConversionResult:
     frame_count: int
     palette: list
     pixel_size: int
+    truncated: bool = False
     source: dict = field(default_factory=dict)
     params: dict = field(default_factory=dict)
 
@@ -278,11 +279,11 @@ def convert(video_path, out_dir, params, progress=None, cancelled=None):
 
     os.makedirs(out_dir, exist_ok=True)
     raw_path = os.path.join(out_dir, 'rgb.tmp')
-    frame_bytes = gw * gh * 3
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         raise ConversionError('Video açılamadı')
     count = 0
+    truncated = False
     try:
         if start > 0:
             cap.set(cv2.CAP_PROP_POS_MSEC, start * 1000.0)
@@ -314,6 +315,9 @@ def convert(video_path, out_dir, params, progress=None, cancelled=None):
                 count += 1
                 if count % 5 == 0:
                     progress(min(0.8, 0.8 * count / expected), f'Frame okunuyor… {count}')
+        # Sınıra takıldıysa videonun devamı var mı?
+        if count >= max_frames and cap.grab():
+            truncated = (index / src_fps) <= end
     finally:
         cap.release()
 
@@ -352,6 +356,7 @@ def convert(video_path, out_dir, params, progress=None, cancelled=None):
     result = ConversionResult(
         width=gw, height=gh, fps=round(target_fps, 4), frame_count=count, palette=palette,
         pixel_size=eff_ps,
+        truncated=truncated,
         source={'width': info.width, 'height': info.height, 'fps': round(src_fps, 4),
                 'duration': round(info.duration, 3)},
         params={k: v for k, v in asdict(params).items()},

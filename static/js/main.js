@@ -342,7 +342,8 @@ function showPreview() {
     const src = m.source;
     $('infoLine').textContent = `${m.frame_count} frame · ${m.fps} fps · ${(m.frame_count / m.fps).toFixed(1)} sn · grid ${m.width}×${m.height}` +
         ` · ${m.palette.length} renk · kaynak ${src.width}×${src.height}` +
-        (m.pixel_size !== m.params.pixel_size ? ` · pixel boyutu otomatik ${m.pixel_size} yapıldı (çözünürlük sınırı)` : '');
+        (m.pixel_size !== m.params.pixel_size ? ` · pixel boyutu otomatik ${m.pixel_size} yapıldı (çözünürlük sınırı)` : '') +
+        (m.truncated ? ` · ⚠ video ${m.frame_count} frame sınırında kesildi (bitiş zamanı veya daha düşük fps seç)` : '');
     const original = $('originalVideo');
     original.play().catch(() => {});
 }
@@ -394,8 +395,8 @@ function showResult() {
 
 // ------------------------------------------------------------------ dışa aktarma
 
-function exportRenderer() {
-    const width = Number($('exportSize').value);
+function exportRenderer(maxWidth = Infinity) {
+    const width = Math.min(maxWidth, Number($('exportSize').value));
     const canvas = document.createElement('canvas');
     const renderer = new Renderer(canvas, state.video);
     let [w, h] = renderer.fitSize(width, width * 4);
@@ -443,8 +444,11 @@ function download() {
     const v = state.video;
     const base = `pixel_art_${$('modeSelect').value.replace(/[^a-z0-9]+/gi, '_')}`;
     if (format === 'gif') {
+        // GIF sıkıştırması zayıf: büyük boyut + uzun video yüzlerce MB eder
+        const gifMax = 720;
+        if (Number($('exportSize').value) > gifMax) toast(`GIF için boyut ${gifMax} px ile sınırlandı`);
         return runExport('GIF oluşturuluyor', async (progress, signal) => {
-            const renderer = exportRenderer();
+            const renderer = exportRenderer(gifMax);
             const blob = await encodeGif({ renderer, frameCount: v.frameCount, fps: v.fps, onProgress: progress, signal });
             downloadBlob(blob, `${base}.gif`);
             toast(`GIF hazır (${(blob.size / 1e6).toFixed(1)} MB)`, 'success');

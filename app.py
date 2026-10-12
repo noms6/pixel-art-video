@@ -106,7 +106,8 @@ def create_app(data_dir=None, workers=2):
 
     @app.post('/api/jobs')
     def create_job():
-        form = request.get_json(silent=True) or request.form
+        data = request.get_json(silent=True)
+        form = data if isinstance(data, dict) else request.form
         upload_id = form.get('upload_id', '')
         if not is_valid_id(upload_id):
             return error('Geçersiz upload_id')

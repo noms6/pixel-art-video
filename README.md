@@ -18,7 +18,18 @@ video, GIF ya da tek dosyalık bir web sayfası olarak sevdiğine gönder.
 - **Paylaş**: telefonda doğrudan paylaşım menüsü, masaüstünde dosya indirme
 - **20 tema, 15 hareketli arka plan**, mobil uyumlu arayüz, ayarlar tarayıcıda hatırlanır
 
-## 🚀 Çalıştırma
+## 📥 İndir (Windows)
+
+[Releases](../../releases) sayfasından `PixelArtVideo-Windows-x64.zip` dosyasını indir, bir klasöre çıkar ve
+`VideoASCIIArtConverter.exe`'yi çalıştır. Python kurmana gerek yok; tarayıcı otomatik açılır.
+
+> **"Windows bilgisayarınızı korudu" uyarısı:** Exe dijital olarak imzalı olmadığı için SmartScreen ilk açılışta
+> uyarabilir. **Ek bilgi → Yine de çalıştır** ile açabilirsin. Bazı antivirüsler PyInstaller ile paketlenmiş
+> uygulamaları yanlışlıkla işaretleyebilir; kaynak kodun tamamı bu repodadır, istersen kendin derleyebilirsin.
+
+Uygulama yalnızca bu bilgisayarda çalışır (`127.0.0.1`); videoların hiçbir sunucuya gönderilmez.
+
+## 🚀 Çalıştırma (kaynak koddan)
 
 ### Python ile
 
@@ -87,6 +98,12 @@ Kapsam: dönüştürücü (fps, kırpma, küçük/tek renk videolar, paletler, d
 JSON hatalar, 413, eşzamanlı yüklemeler, TTL temizliği) ve GIF kodlayıcının Pillow ile piksel piksel doğrulanması
 (Node.js gerekir).
 
+## 🌐 Tarayıcı desteği
+
+Güncel Chrome, Edge, Firefox ve Safari (16.4+). MP4 kaydı tarayıcı destekliyorsa yapılır; desteklemiyorsa
+otomatik WebM'e geçilir. Kaydedilen HTML sayfası JavaScript çalıştırmayan önizleyicilerde (ör. iPhone'da
+WhatsApp/Dosyalar önizlemesi) yalnızca mesajı gösterir; animasyon için dosyayı tarayıcıda açmak gerekir.
+
 ## 🐛 Sorun giderme
 
 - **Orijinal video önizlemede görünmüyor**: Tarayıcı bazı formatları (AVI, MKV, WMV, FLV) oynatamaz;
@@ -95,3 +112,17 @@ JSON hatalar, 413, eşzamanlı yüklemeler, TTL temizliği) ve GIF kodlayıcın�
   Daha hızlı sonuç için GIF seç.
 - **Pixel boyutu otomatik büyüdü**: Grid en fazla 320×320 hücre olabilir; çok yüksek çözünürlükte
   pixel boyutu otomatik artırılır.
+- **"Video … frame sınırında kesildi"**: En fazla 3000 frame işlenir. Bitiş zamanı ver ya da fps'i düşür.
+
+## 📚 Geliştirme notları
+
+Proje analizi, test raporları ve yol haritası: [docs/ANALIZ_VE_PLAN.md](docs/ANALIZ_VE_PLAN.md)
+
+Yeni sürüm yayınlamak: `git tag v1.0.0 && git push --tags` — GitHub Actions testleri çalıştırır, exe'yi derler ve
+Release'e ekler.
+
+## 📄 Üçüncü taraf yazılımlar
+
+Exe şu açık kaynak bileşenleri içerir: [OpenCV](https://opencv.org) (Apache 2.0) ve onunla gelen
+[FFmpeg](https://ffmpeg.org) (LGPL 2.1), [NumPy](https://numpy.org) (BSD), [Flask](https://flask.palletsprojects.com)
+ve Werkzeug/Jinja2 (BSD), [Waitress](https://github.com/Pylons/waitress) (ZPL 2.1), Python (PSF).

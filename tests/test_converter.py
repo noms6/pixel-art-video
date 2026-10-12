@@ -134,3 +134,9 @@ def test_param_validation(form, msg):
 def test_param_defaults():
     p = ConversionParams.from_form({})
     assert p.pixel_size == 8 and p.fps == 10 and p.palette == 'auto'
+
+
+def test_truncated_flag(tmp_path):
+    v = make_video(tmp_path / 'v.mp4', fps=10, frames=30)
+    assert convert(v, str(tmp_path / 'a'), ConversionParams(fps=0, max_frames=10)).truncated is True
+    assert convert(v, str(tmp_path / 'b'), ConversionParams(fps=0)).truncated is False

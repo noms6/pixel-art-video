@@ -278,14 +278,15 @@ canvas{display:block;margin:0 auto;max-width:100%;height:auto;image-rendering:pi
 </style>
 </head>
 <body>
-<div class="card"><div class="msg" id="msg"></div></div>
-<div class="stage" id="stage"><div class="loading" id="loading">Yükleniyor…</div><canvas id="c"></canvas><div class="hint">Durdurmak / devam ettirmek için dokun</div></div>
+<div class="card"${message ? '' : ' style="display:none"'}><div class="msg" id="msg">${escapeHtml(message || '')}</div></div>
+<div class="stage" id="stage"><div class="loading" id="loading">Animasyon yükleniyor… Görünmüyorsa dosyayı Chrome, Edge veya Safari ile aç.</div><canvas id="c"></canvas><div class="hint">Durdurmak / devam ettirmek için dokun</div></div>
 <script>${rendererSrc}</script>
 <script>
 (async function () {
   const P = ${safeJson(payload)};
   const msg = document.getElementById('msg');
   if (P.typewriter && P.message) {
+    msg.textContent = '';
     msg.classList.add('typing');
     const chars = Array.from(P.message);
     let i = 0;
@@ -294,10 +295,7 @@ canvas{display:block;margin:0 auto;max-width:100%;height:auto;image-rendering:pi
       if (i < chars.length) setTimeout(step, chars[i - 1] === '\\n' ? 350 : 55);
       else msg.classList.remove('typing');
     })();
-  } else {
-    msg.textContent = P.message;
   }
-  if (!P.message) msg.parentElement.style.display = 'none';
   const bin = atob(P.data);
   let bytes = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);

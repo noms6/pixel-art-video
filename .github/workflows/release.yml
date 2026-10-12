@@ -1,0 +1,31 @@
+name: Release
+
+# v1.0.0 gibi bir etiket push'lanınca Windows exe'si derlenir ve GitHub Release'e eklenir.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Paketleri kur
+        run: pip install -r requirements-dev.txt
+      - name: Testler
+        run: python -m pytest -q
+      - name: Exe derle
+        run: python build_exe.py
+      - name: Zip
+        shell: pwsh
+        run: Compress-Archive -Path dist/VideoASCIIArtConverter -DestinationPath PixelArtVideo-Windows-x64.zip
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: PixelArtVideo-Windows-x64.zip
+          generate_release_notes: true

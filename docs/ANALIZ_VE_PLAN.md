@@ -56,7 +56,7 @@ GET /outputs/x.json (100+ MB) ─► JSON.parse ─► pixelData
 | Tarayıcı: 106.7 MB indir + parse | 466 ms + 263 ms, JS heap ≈ 168 MB (güçlü PC'de) |
 | Tarayıcı: tek çiçek frame'i (rose, ölçek 3) | 40 ms; yoğunluk 3'te 62 ms; ASCII modu 64 ms (12 fps bütçesi 83 ms — zayıf cihazda kaçırır) |
 | "Siteyi Kaydet" | **5.6 sn ana thread donması**, 13.2 MB HTML (sadece 8 sn'lik video için) |
-| `Hiko_Baba...mp4` (1330 frame) mevcut çıktı | `dist/static/outputs/...json` = **190 MB** |
+| 55 sn örnek video (1330 frame) mevcut çıktı | `dist/static/outputs/...json` = **190 MB** |
 
 ### Prototip karşılaştırması (aynı 96 frame, px=8)
 
@@ -118,7 +118,7 @@ RAM **2.1 GB**, çıktı 1.50 GB. Bu JSON tarayıcıda açılmaya çalışılın
 | Test | Sonuç |
 |---|---|
 | input.mp4 tam akış (yükle → pixel → START → çiçek) | ✅ çalışıyor; yüklemeden oynatmaya 17.5 sn |
-| Hiko Baba (55 sn, 640×360) tam akış | ✅ 30 sn işlem, 665 frame, **JS heap 355 MB** |
+| 55 sn örnek video (55 sn, 640×360) tam akış | ✅ 30 sn işlem, 665 frame, **JS heap 355 MB** |
 | Çiçek animasyonu gerçek fps | Hedef 12 fps → **10 fps** (video ağır çekim oynuyor; zaman tabanlı değil, frame sayaçlı) |
 | 28 çiçek/şekil tipi tek tek | ✅ hata yok, 17–63 ms/frame. **Kopyalar:** Üçgen = Gül, Papatya = Lotus = Ayçiçeği, Kare = ASCII Blok (aynı desen) |
 | Yoğunluk 1 / 1.5 / 3 | **Piksel piksel aynı görüntü** — kaydırıcının 1–3 aralığı işlevsiz |
@@ -138,7 +138,7 @@ RAM **2.1 GB**, çıktı 1.50 GB. Bu JSON tarayıcıda açılmaya çalışılın
 | Maksimum Frame -5 | Kabul ediliyor → sunucuda yanlış hata |
 | START sonrası yeni video | ❌ Yükleme bölümüne dönüş yolu yok (sayfa yenilemek gerekiyor); `stopFlowerAnimation` hiç çağrılmıyor |
 | Mesaj + "Siteyi Kaydet" (input.mp4) | 5.8 sn donma, 13.2 MB. **XSS doğrulandı:** `<img onerror>` ve `<script>` kaydedilen dosyada çalıştı |
-| "Siteyi Kaydet" (Hiko Baba) | **33.7 sn donma, 69 MB HTML** (e-posta eki sınırı 25 MB) |
+| "Siteyi Kaydet" (55 sn örnek video) | **33.7 sn donma, 69 MB HTML** (e-posta eki sınırı 25 MB) |
 | Kaydedilen HTML'de çiçek videosu | 800×600 sabit → 16:9 / dikey videolar **bozuk oranlı** |
 | Piksel video indir | ✅ WebM, 1280×720, ama **10.5 sn (orijinal 8 sn)** — %30 yavaş |
 | Çiçek video indir | ✅ WebM, ama **12.8 sn (orijinal 8 sn)** — %60 yavaş; çiçek aralarındaki boşluk **siyah** |
@@ -428,11 +428,11 @@ Faz 0, Faz 1, Faz 2 ve Faz 3 tamamlandı; Faz 4'ten ilk özellik paketi eklendi.
 | Metrik | Önce | Sonra |
 |---|---|---|
 | 8 sn 720p video işleme | 16 sn | **1.0 sn** |
-| Hiko Baba (55 sn): yükle → oynat | 34 sn, 190 MB JSON | **1.1 sn, 337 KB** |
+| 55 sn örnek video (55 sn): yükle → oynat | 34 sn, 190 MB JSON | **1.1 sn, 337 KB** |
 | 60 sn 1080p | 199 sn, 1.5 GB, 2.1 GB RAM, sekme çöktü | **6.8 sn, 479 KB, 25 MB RAM** |
-| Tarayıcı belleği (Hiko) | 355 MB | **5 MB** |
+| Tarayıcı belleği (55 sn örnek) | 355 MB | **5 MB** |
 | Çiçek frame çizimi | 33–63 ms | **~1 ms** (ASCII ~13 ms) |
-| Siteyi kaydet (Hiko) | 33.7 sn donma, 69 MB | **0.14 sn, 448 KB** |
+| Siteyi kaydet (55 sn örnek) | 33.7 sn donma, 69 MB | **0.14 sn, 448 KB** |
 | Video export süresi (8 sn video) | 10.5 / 12.8 sn | **7.9 sn** (MP4 gerçekten MP4) |
 | Exe klasörü | 73 MB onefile + 157 MB eski çöp içeride | 157 MB onedir, 3 sn açılış |
 
